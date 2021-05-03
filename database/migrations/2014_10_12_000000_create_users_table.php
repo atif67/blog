@@ -21,6 +21,10 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
+            $table->tinyText('about')->nullable();
+            $table->string('avatar')->nullable();
+            $table->integer('role_id')->default(4);
         });
     }
 

@@ -19,6 +19,13 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/admin-assets/css/app-light.css') }}" id="lightTheme" disabled>
     <link rel="stylesheet" href="{{ URL::asset('assets/admin-assets/css/app-dark.css') }}" id="darkTheme">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    @yield('head')
+    <style>
+        a:hover{
+            text-decoration: none;
+        }
+
+    </style>
 </head>
 <body class="vertical  dark  ">
 <div class="wrapper">
@@ -52,7 +59,11 @@
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="#">Profil</a>
                     <a class="dropdown-item" href="#">Ayarlar</a>
-                    <a class="dropdown-item" href="#">Çıkış Yap</a>
+                    <a class="dropdown-item" href="javascript:;" onclick="document.getElementById('logout').submit();">Çıkış Yap</a>
+
+                    <form action="{{ route('logout') }}" id="logout" method="post">
+                            @csrf
+                    </form>
                 </div>
             </li>
         </ul>
@@ -64,7 +75,7 @@
         <nav class="vertnav navbar navbar-light">
             <!-- nav bar -->
             <div class="w-100 mb-4 d-flex">
-                <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="./index.html">
+                <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="{{ route('admin.home') }}">
                     <svg version="1.1" id="logo" class="navbar-brand-img brand-sm" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 120 120" xml:space="preserve">
                 <g>
                     <polygon class="st0" points="78,105 15,105 24,87 87,87 	" />
@@ -78,32 +89,34 @@
                 <span>Menü</span>
             </p>
             <ul class="navbar-nav flex-fill w-100 mb-2">
-                <li class="nav-item">
-                    <a href="#" class=" nav-link">
+                <li class="nav-item {{ preg_match('/posts/',request()->url()) ? 'active' : '' }}">
+                    <a href="{{ route('posts.index') }}" class=" nav-link">
                         <i class="fas fa-paste"></i>
                         <span class="ml-3 item-text">Postlar</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class=" nav-link">
-                        <i class="fas fa-users"></i>
-                        <span class="ml-3 item-text">Kullanıcı İşlemleri</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class=" nav-link">
+                @if(auth()->user()->role_id == 1)
+                    <li class="nav-item {{ preg_match('/users/',request()->url()) ? 'active' : '' }}">
+                        <a href="{{ route('users.index') }}" class=" nav-link">
+                            <i class="fas fa-users"></i>
+                            <span class="ml-3 item-text">Kullanıcılar</span>
+                        </a>
+                    </li>
+                @endif
+                <li class="nav-item {{ preg_match('/comments/',request()->url()) ? 'active' : '' }}">
+                    <a href="{{ route('comments.index') }}" class=" nav-link">
                         <i class="fas fa-comments"></i>
                         <span class="ml-3 item-text">Yorumlar</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class=" nav-link">
+                <li class="nav-item {{ preg_match('/categories/',request()->url()) ? 'active' : '' }}">
+                    <a href="{{ route('categories.index') }}" class=" nav-link">
                         <i class="fab fa-buromobelexperte"></i>
                         <span class="ml-3 item-text">Kategoriler</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class=" nav-link">
+                <li class="nav-item {{ preg_match('/tags/',request()->url()) ? 'active' : '' }}">
+                    <a href="{{ route('tags.index') }}" class=" nav-link">
                         <i class="fas fa-tag"></i>
                         <span class="ml-3 item-text">Etiketler</span>
                     </a>
@@ -266,5 +279,6 @@
     gtag('js', new Date());
     gtag('config', 'UA-56159088-1');
 </script>
+@yield('script')
 </body>
 </html>

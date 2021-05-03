@@ -16,10 +16,43 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
 });
 
-Route::get('admin', function (){
-    return view('admin.index');
+
+
+
+
+
+Route::get('admin/comments',function (){
+    return view('admin.comments.index');
+})->name('comments.index');
+
+Route::get('admin/login',[\App\Http\Controllers\Admin\UserController::class,'loginView'])->name('login');
+Route::post('admin/login',[\App\Http\Controllers\Admin\UserController::class,'login'])->name('login');
+Route::post('admin/logout',[\App\Http\Controllers\Admin\UserController::class,'logout'])->name('logout');
+
+Route::middleware(['auth'])->group(function (){
+    Route::get('admin',[\App\Http\Controllers\Admin\HomeController::class,'get'])->name('admin.home');
 });
 
-Auth::routes();
+Route::middleware(['auth'])->prefix('admin')->group(function (){
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('posts',[\App\Http\Controllers\Admin\PostController::class,'get'])->name('posts.index');
+    Route::get('posts/new',[\App\Http\Controllers\Admin\PostController::class,'createView'])->name('posts.create');
+    Route::post('posts/new',[\App\Http\Controllers\Admin\PostController::class,'post'])->name('posts.create');
+
+    Route::get('users/new',[\App\Http\Controllers\Admin\UserController::class,'createView'])->name('users.create');
+    Route::get('users',[\App\Http\Controllers\Admin\UserController::class,'get'])->name('users.index');
+    Route::get('users/update/{id}',[\App\Http\Controllers\Admin\UserController::class,'getById'])->name('users.update');
+    Route::put('users/update/{id}',[\App\Http\Controllers\Admin\UserController::class,'put'])->name('users.update');
+    Route::post('users/new',[\App\Http\Controllers\Admin\UserController::class,'post'])->name('users.create');
+    Route::delete('users/delete-user/{id}',[\App\Http\Controllers\Admin\UserController::class,'destroy'])->name('users.delete');
+
+    Route::get('categories',[\App\Http\Controllers\Admin\CategoryController::class,'get'])->name('categories.index');
+    Route::post('categories/new',[\App\Http\Controllers\Admin\CategoryController::class,'post'])->name('categories.create');
+    Route::put('categories/update/{id}',[\App\Http\Controllers\Admin\CategoryController::class,'put'])->name('categories.update');
+    Route::delete('categories/delete/{id}',[\App\Http\Controllers\Admin\CategoryController::class,'destroy'])->name('categories.destroy');
+
+    Route::get('tags',[\App\Http\Controllers\Admin\TagController::class,'get'])->name('tags.index');
+    Route::post('tags/new',[\App\Http\Controllers\Admin\TagController::class,'post'])->name('tags.create');
+    Route::put('tags/update/{id}',[\App\Http\Controllers\Admin\TagController::class,'put'])->name('tags.update');
+    Route::delete('tags/delete/{id}',[\App\Http\Controllers\Admin\TagController::class,'destroy'])->name('tags.destroy');
+});
