@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
-    <title>Blog Dashboard</title>
+    <link rel="icon" href="{{ URL::asset('storage/'.$settings->favicon) }}">
+    <title>{{ $settings->site_title }}</title>
     <!-- Simple bar CSS -->
     <link rel="stylesheet" href="{{ URL::asset('assets/admin-assets/css/simplebar.css') }}">
     <!-- Fonts CSS -->
@@ -39,30 +39,19 @@
                     <i class="fe fe-sun fe-16"></i>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-muted my-2" href="./#" data-toggle="modal" data-target=".modal-shortcut">
-                    <span class="fe fe-grid fe-16"></span>
-                </a>
-            </li>
-            <li class="nav-item nav-notif">
-                <a class="nav-link text-muted my-2" href="./#" data-toggle="modal" data-target=".modal-notif">
-                    <span class="fe fe-bell fe-16"></span>
-                    <span class="dot dot-md bg-success"></span>
-                </a>
-            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-muted pr-0" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="avatar avatar-sm mt-2">
-                <img src="{{ URL::asset('assets/admin-assets/assets/avatars/face-1.jpg') }}" alt="..." class="avatar-img rounded-circle">
+                <img src="{{ isset(auth()->user()->avatar) ? URL::asset('storage/'.auth()->user()->avatar) : URL::asset('storage/avatar.png') }}" alt="..." class="avatar-img rounded-circle">
               </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="#">Profil</a>
+                    <a class="dropdown-item" href="{{ route('users.profile') }}">Profil</a>
                     <a class="dropdown-item" href="#">Ayarlar</a>
                     <a class="dropdown-item" href="javascript:;" onclick="document.getElementById('logout').submit();">Çıkış Yap</a>
 
                     <form action="{{ route('logout') }}" id="logout" method="post">
-                            @csrf
+                        @csrf
                     </form>
                 </div>
             </li>
@@ -92,7 +81,7 @@
                 <li class="nav-item {{ preg_match('/posts/',request()->url()) ? 'active' : '' }}">
                     <a href="{{ route('posts.index') }}" class=" nav-link">
                         <i class="fas fa-paste"></i>
-                        <span class="ml-3 item-text">Postlar</span>
+                        <span class="ml-3 item-text">Yazılar</span>
                     </a>
                 </li>
                 @if(auth()->user()->role_id == 1)
@@ -103,12 +92,14 @@
                         </a>
                     </li>
                 @endif
-                <li class="nav-item {{ preg_match('/comments/',request()->url()) ? 'active' : '' }}">
-                    <a href="{{ route('comments.index') }}" class=" nav-link">
-                        <i class="fas fa-comments"></i>
-                        <span class="ml-3 item-text">Yorumlar</span>
-                    </a>
-                </li>
+                @if(auth()->user()->role_id != 3)
+                    <li class="nav-item {{ preg_match('/comments/',request()->url()) ? 'active' : '' }}">
+                        <a href="{{ route('comments.index') }}" class=" nav-link">
+                            <i class="fas fa-comments"></i>
+                            <span class="ml-3 item-text">Yorumlar</span>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item {{ preg_match('/categories/',request()->url()) ? 'active' : '' }}">
                     <a href="{{ route('categories.index') }}" class=" nav-link">
                         <i class="fab fa-buromobelexperte"></i>
@@ -121,6 +112,14 @@
                         <span class="ml-3 item-text">Etiketler</span>
                     </a>
                 </li>
+                @if(auth()->user()->role_id == 1)
+                    <li class="nav-item {{ preg_match('/settings/',request()->url()) ? 'active' : '' }}">
+                        <a href="{{ route('settings') }}" class=" nav-link">
+                            <i class="fas fa-cogs"></i>
+                            <span class="ml-3 item-text">Ayarlar</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </nav>
     </aside>
@@ -132,129 +131,6 @@
                 </div> <!-- .col-12 -->
             </div> <!-- .row -->
         </div> <!-- .container-fluid -->
-        <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="list-group list-group-flush my-n3">
-                            <div class="list-group-item bg-transparent">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <span class="fe fe-box fe-24"></span>
-                                    </div>
-                                    <div class="col">
-                                        <small><strong>Package has uploaded successfull</strong></small>
-                                        <div class="my-0 text-muted small">Package is zipped and uploaded</div>
-                                        <small class="badge badge-pill badge-light text-muted">1m ago</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="list-group-item bg-transparent">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <span class="fe fe-download fe-24"></span>
-                                    </div>
-                                    <div class="col">
-                                        <small><strong>Widgets are updated successfull</strong></small>
-                                        <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
-                                        <small class="badge badge-pill badge-light text-muted">2m ago</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="list-group-item bg-transparent">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <span class="fe fe-inbox fe-24"></span>
-                                    </div>
-                                    <div class="col">
-                                        <small><strong>Notifications have been sent</strong></small>
-                                        <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
-                                        <small class="badge badge-pill badge-light text-muted">30m ago</small>
-                                    </div>
-                                </div> <!-- / .row -->
-                            </div>
-                            <div class="list-group-item bg-transparent">
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <span class="fe fe-link fe-24"></span>
-                                    </div>
-                                    <div class="col">
-                                        <small><strong>Link was attached to menu</strong></small>
-                                        <div class="my-0 text-muted small">New layout has been attached to the menu</div>
-                                        <small class="badge badge-pill badge-light text-muted">1h ago</small>
-                                    </div>
-                                </div>
-                            </div> <!-- / .row -->
-                        </div> <!-- / .list-group -->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body px-5">
-                        <div class="row align-items-center">
-                            <div class="col-6 text-center">
-                                <div class="squircle bg-success justify-content-center">
-                                    <i class="fe fe-cpu fe-32 align-self-center text-white"></i>
-                                </div>
-                                <p>Control area</p>
-                            </div>
-                            <div class="col-6 text-center">
-                                <div class="squircle bg-primary justify-content-center">
-                                    <i class="fe fe-activity fe-32 align-self-center text-white"></i>
-                                </div>
-                                <p>Activity</p>
-                            </div>
-                        </div>
-                        <div class="row align-items-center">
-                            <div class="col-6 text-center">
-                                <div class="squircle bg-primary justify-content-center">
-                                    <i class="fe fe-droplet fe-32 align-self-center text-white"></i>
-                                </div>
-                                <p>Droplet</p>
-                            </div>
-                            <div class="col-6 text-center">
-                                <div class="squircle bg-primary justify-content-center">
-                                    <i class="fe fe-upload-cloud fe-32 align-self-center text-white"></i>
-                                </div>
-                                <p>Upload</p>
-                            </div>
-                        </div>
-                        <div class="row align-items-center">
-                            <div class="col-6 text-center">
-                                <div class="squircle bg-primary justify-content-center">
-                                    <i class="fe fe-users fe-32 align-self-center text-white"></i>
-                                </div>
-                                <p>Users</p>
-                            </div>
-                            <div class="col-6 text-center">
-                                <div class="squircle bg-primary justify-content-center">
-                                    <i class="fe fe-settings fe-32 align-self-center text-white"></i>
-                                </div>
-                                <p>Settings</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </main> <!-- main -->
 </div> <!-- .wrapper -->
 <script src="{{ URL::asset('assets/admin-assets/js/jquery.min.js') }}"></script>

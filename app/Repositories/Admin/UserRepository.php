@@ -4,10 +4,13 @@
 namespace App\Repositories\Admin;
 
 
+use App\Http\Requests\UpdatePasswordRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Interfaces\Admin\UserInterface;
+use App\Models\Post;
 use App\Models\User;
 use App\Traits\Admin\ResponseView;
 use Illuminate\Http\Request;
@@ -55,6 +58,12 @@ class UserRepository implements UserInterface
         return redirect()->route('login');
     }
 
+    public function profile()
+    {
+        $posts = Post::get('user_id');
+        return view('admin.users.profile')->with(['posts' => $posts]);
+    }
+
     public function get()
     {
         // TODO: Implement get() method.
@@ -68,7 +77,9 @@ class UserRepository implements UserInterface
             $users = User::with('role')->get();
         }
 
-        return view('admin.users.index')->with(['users' => $users]);
+        $posts = Post::get('user_id');
+
+        return view('admin.users.index')->with(['users' => $users,'posts' => $posts]);
 
     }
 
@@ -127,6 +138,53 @@ class UserRepository implements UserInterface
         $user->save();
 
         return redirect()->route('users.index');
+    }
+
+    public function updateProfile(UpdateProfileRequest $request, $id)
+    {
+        // TODO: Implement updateProfile() method.
+        if (Auth::id() != $id)
+        {
+            return abort(404);
+        }
+        $user = User::find($id);
+        $user->name = $request->input('name');
+        $user->about = $request->input('about');
+
+        if (is_file($request->image))
+        {
+            $generateFileName = now()->unix().rand(); // generate uniq file name
+            $extension = $request->file('image')->extension(); // get file extension
+            $fullName = $generateFileName.'.'.$extension;
+
+            $path = $request->file('image')->storeAs('images',$fullName,'public'); // storing file
+            $user->avatar = $path;
+        }
+        $user->save();
+        session()->flash('status', 'ok');
+        return redirect()->route('users.profile');
+
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request, $id)
+    {
+        // TODO: Implement updatePassword() method.
+        if (Auth::id() != $id)
+        {
+            return abort(404);
+        }
+
+        if (Auth::attempt(['email' => Auth::user()->email, 'password' => $request->input('old_pass')]))
+        {
+            $user = User::find(auth()->id());
+            $user->password = Hash::make($request->input('new_pass'));
+            $user->save();
+            session()->flash('status', 'ok');
+            return redirect()->route('users.profile');
+        }else{
+            session()->flash('error', 'invalid_pass');
+            return redirect()->back();
+        }
     }
 
     public function destroy($id)

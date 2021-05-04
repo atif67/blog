@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdatePasswordRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -35,6 +37,11 @@ class UserController extends Controller
         return $this->userInterfaces->logout($request);
     }
 
+    public function profile()
+    {
+        return $this->userInterfaces->profile();
+    }
+
     public function get()
     {
         return $this->userInterfaces->get();
@@ -58,6 +65,16 @@ class UserController extends Controller
     public function put(UserUpdateRequest $request,$id)
     {
         return $this->userInterfaces->put($request,$id);
+    }
+
+    public function updateProfile(UpdateProfileRequest $request,$id)
+    {
+        return $this->userInterfaces->updateProfile($request,$id);
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request,$id)
+    {
+        return $this->userInterfaces->updatePassword($request,$id);
     }
 
     public function destroy($id)

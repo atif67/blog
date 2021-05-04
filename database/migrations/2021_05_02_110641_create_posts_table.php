@@ -25,7 +25,6 @@ class CreatePostsTable extends Migration
             $table->integer('comment_status')->default(0);
             $table->string('slug');
             $table->integer('cat_id');
-            $table->integer('tag_id');
         });
     }
 

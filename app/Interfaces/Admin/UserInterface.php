@@ -4,6 +4,8 @@
 namespace App\Interfaces\Admin;
 
 
+use App\Http\Requests\UpdatePasswordRequest;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -34,6 +36,12 @@ interface UserInterface
      *
      *@method (GET)
      */
+    public function profile();
+
+    /*
+     *
+     *@method (GET)
+     */
     public function get();
 
     /*
@@ -59,6 +67,18 @@ interface UserInterface
      * @method (PUT)
      */
     public function put(UserUpdateRequest $request,$id);
+
+    /*
+     *
+     * @method (PUT)
+     */
+    public function updateProfile(UpdateProfileRequest $request,$id);
+
+    /*
+     *
+     * @method (PUT)
+     */
+    public function updatePassword(UpdatePasswordRequest $request,$id);
 
     /*
      *

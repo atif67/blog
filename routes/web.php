@@ -14,9 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    return view('test');
 });
-
-
 
 
 
@@ -37,8 +36,14 @@ Route::middleware(['auth'])->prefix('admin')->group(function (){
 
     Route::get('posts',[\App\Http\Controllers\Admin\PostController::class,'get'])->name('posts.index');
     Route::get('posts/new',[\App\Http\Controllers\Admin\PostController::class,'createView'])->name('posts.create');
+    Route::get('posts/update/{slug}',[\App\Http\Controllers\Admin\PostController::class,'getById'])->name('posts.show');
     Route::post('posts/new',[\App\Http\Controllers\Admin\PostController::class,'post'])->name('posts.create');
+    Route::put('posts/{slug}',[\App\Http\Controllers\Admin\PostController::class,'put'])->name('posts.update');
+    Route::delete('post/{slug}',[\App\Http\Controllers\Admin\PostController::class,'destroy'])->name('posts.destroy');
 
+    Route::get('profile',[\App\Http\Controllers\Admin\UserController::class,'profile'])->name('users.profile');
+    Route::put('update-profile/{id}',[\App\Http\Controllers\Admin\UserController::class,'updateProfile'])->name('users.update.profile');
+    Route::put('update-password/{id}',[\App\Http\Controllers\Admin\UserController::class,'updatePassword'])->name('users.update.password');
     Route::get('users/new',[\App\Http\Controllers\Admin\UserController::class,'createView'])->name('users.create');
     Route::get('users',[\App\Http\Controllers\Admin\UserController::class,'get'])->name('users.index');
     Route::get('users/update/{id}',[\App\Http\Controllers\Admin\UserController::class,'getById'])->name('users.update');
@@ -55,4 +60,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function (){
     Route::post('tags/new',[\App\Http\Controllers\Admin\TagController::class,'post'])->name('tags.create');
     Route::put('tags/update/{id}',[\App\Http\Controllers\Admin\TagController::class,'put'])->name('tags.update');
     Route::delete('tags/delete/{id}',[\App\Http\Controllers\Admin\TagController::class,'destroy'])->name('tags.destroy');
+
+    Route::get('settings',[\App\Http\Controllers\Admin\SettingsController::class,'get'])->name('settings');
+    Route::put('settings',[\App\Http\Controllers\Admin\SettingsController::class,'put'])->name('settings');
 });

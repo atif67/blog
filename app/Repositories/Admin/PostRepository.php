@@ -7,9 +7,14 @@ namespace App\Repositories\Admin;
 use App\Http\Requests\PostCreateRequest;
 use App\Http\Requests\PostUpdateRequest;
 use App\Interfaces\Admin\PostInterface;
+use App\Models\Category;
 use App\Models\Post;
+use App\Models\PostTag;
+use App\Models\Tag;
 use App\Traits\Admin\ResponseView;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PostRepository implements PostInterface
@@ -19,81 +24,141 @@ class PostRepository implements PostInterface
     public function get()
     {
         // TODO: Implement get() method.
-        $posts = Post::all();
-        return $this->success('admin.posts.index',$posts);
+        $catId = request()->query('category-id');
+        if ($catId)
+        {
+            $posts = Post::where('cat_id',$catId)->with('category')->orderBy('id','desc')->get();
+        }else
+        {
+            $posts = Post::with('category')->orderBy('id','desc')->get();
+        }
+
+        $userId = request()->query('user');
+
+        if ($userId)
+        {
+            $posts = Post::where('user_id', $userId)->with('category')->orderBy('id','desc')->get();
+        }
+
+        $post_tags = PostTag::with('posts')->with('tags')->get();
+
+        return view('admin.posts.index')->with(['posts' => $posts, 'post_tags' => $post_tags]);
     }
 
-    public function getById($id)
+    public function getById($slug)
     {
+
         // TODO: Implement getById() method.
-        $post = Post::find($id);
+        $post = Post::where('slug',$slug)->first();
         if (! $post){
             return abort(404);
         }
+        $post_tags = PostTag::with('posts')->with('tags')->get();
+        $categories = Category::all();
+        $tags = Tag::all();
 
-        return $this->success('admin.posts.create',$post);
+
+        return view('admin.posts.create')->with([
+            'post' => $post,
+            'categories' => $categories,
+            'tags' => $tags,
+            'post_tags' => $post_tags
+        ]);
     }
 
     public function createView()
     {
         // TODO: Implement createView() method.
-        return $this->success('admin.posts.create');
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('admin.posts.create')->with(['categories' => $categories, 'tags' => $tags]);
     }
 
     public function post(PostCreateRequest $request)
     {
         // TODO: Implement post() method.
-
         $post = new Post();
         $post->user_id = Auth::id();
-        $post->title = $request->title;
-        $post->content = $request->content;
-        $post->summary = $request->summary;
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->summary = $request->input('summary');
         if (is_file($request->image)){
+            $generateFileName = now()->unix().rand(); // generate uniq file name
+            $extension = $request->file('image')->extension(); // get file extension
+            $fullName = $generateFileName.'.'.$extension;
 
-
+            $path = $request->file('image')->storeAs('images',$fullName,'public'); // storing file
+            $post->image = $path;
         }
-        if ($request->comment_status)
+        if ($request->input('comment_status'))
         {
             $post->comment_status = 1;
         }
-        $slug = $request->title.'-'.now()->timestamp;
+        $slug = $request->input('title').'-'.now()->timestamp;
         $post->slug = Str::slug($slug);
-        $post->cat_id = $request->cat_id;
-        $post->tag_id = $request->tag_id;
-
+        $post->cat_id = $request->input('cat_id');
         $post->save();
+
+        foreach ($request->input('tag_id') as $tag_id)
+        {
+            $post_tag = new PostTag();
+            $post_tag->post_id = $post->id;
+            $post_tag->tag_id = $tag_id;
+            $post_tag->save();
+        }
 
         return redirect()->route('posts.index');
 
     }
 
-    public function put(PostUpdateRequest $request,$id)
+    public function put(PostUpdateRequest $request,$slug)
     {
+
         // TODO: Implement put() method.
-        $post = Post::find($id);
-        $post->title = $request->title;
-        $post->content = $request->content;
-        $post->summary = $request->summary;
+        $post = Post::where('slug',$slug)->first();
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->summary = $request->input('summary');
+
         if (is_file($request->image)){
+            $generateFileName = now()->unix().rand(); // generate uniq file name
+            $extension = $request->file('image')->extension(); // get file extension
+            $fullName = $generateFileName.'.'.$extension;
 
-
+            $path = $request->file('image')->storeAs('images',$fullName,'public'); // storing file
+            $post->image = $path;
         }
-        $post->comment_status = $request->comment_status;
-        $slug = $request->title.now()->timestamp;
+        if ($request->comment_status)
+        {
+            $post->comment_status = 1;
+        }else{
+            $post->comment_status = 0;
+        }
+
+        $slug = $request->input('title').now()->timestamp;
         $post->slug = Str::slug($slug);
-        $post->cat_id = $request->cat_id;
-        $post->tag_id = $request->tag_id;
+        $post->cat_id = $request->input('cat_id');
         $post->save();
 
-        return $this->success('admin.posts.index');
+        $post_tag = PostTag::where('post_id',$post->id)->get()->toArray();
+        foreach ($request->input('tag_id') as $tag_id)
+        {
+            foreach ($post_tag as $item){
+                $postTag = PostTag::find(data_get($item,'id'));
+                $postTag->tag_id = $tag_id;
+                $postTag->save();
+            }
+
+        }
+
+        return redirect()->route('posts.index');
 
     }
 
-    public function destroy($id)
+    public function destroy($slug)
     {
         // TODO: Implement destroy() method.
-        $post = Post::find($id);
+        $post = Post::where('slug', $slug)->first();
         if (! $post){
             return abort(404);
         }
@@ -103,7 +168,7 @@ class PostRepository implements PostInterface
             return abort(404);
         }
 
-        Post::destroy($id);
-        return $this->success('admin.posts.index');
+        Post::destroy($post->id);
+        return redirect()->route('posts.index');
     }
 }

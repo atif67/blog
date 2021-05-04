@@ -19,7 +19,7 @@ interface PostInterface
      *
      *@method (GET)
      */
-    public function getById($id);
+    public function getById($slug);
 
    /*
     *
@@ -37,13 +37,13 @@ interface PostInterface
      *
      * @method (PUT)
      */
-    public function put(PostUpdateRequest $request,$id);
+    public function put(PostUpdateRequest $request,$slug);
 
     /*
      *
      * @method (DELETE)
      */
-    public function destroy($id);
+    public function destroy($slug);
 
 
 }

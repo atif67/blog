@@ -21,73 +21,90 @@
         </div>
     </div>
 <div class="row">
-    @foreach($users as $user)
-        <div class="col-md-3">
-            <div class="card shadow mb-4">
-                <div class="card-body text-center">
-                    <div class="avatar avatar-lg mt-4">
-                        <a href="{{ route('users.update',$user->id) }}">
-                            <img src="{{ URL::asset('assets/admin-assets/assets/avatars/face-4.jpg') }}" alt="..." class="avatar-img rounded-circle">
-                        </a>
-                    </div>
-                    <div class="card-text my-2">
-                        <strong class="card-title my-0"><a href="{{ route('users.update',$user->id) }}">{{ $user->name }} </a></strong>
-                        <p class="small"><span class="badge badge-light text-muted">{{ $user->role->name }}</span></p>
-                    </div>
-                </div> <!-- ./card-text -->
-                <div class="card-footer">
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-auto">
-                            <small>Postlar : 2</small>
-                        </div>
-                        <div>
-                            @if($user->id != \Illuminate\Support\Facades\Auth::id())
-                                <a href="javascript;;" data-toggle="modal" data-target="#defaultModal{{$user->id}}"><i class="fa fa-trash mr-2"></i></a>
-                                <form action="{{ route('users.delete',$user->id) }}" id="delete-user{{$user->id}}" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            @endif
-                        </div>
-                    </div>
-                </div> <!-- /.card-footer -->
-            </div>
-        </div>
-        <div class="modal fade" id="defaultModal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="defaultModalLabel">Bu Kullanıcıyı Silmek İstediğinize Emin Misiniz?</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
+    @if($users->count() > 1)
+        @foreach($users as $user)
+            @if($user->id != \Illuminate\Support\Facades\Auth::id())
+                <div class="col-md-3">
+                    <div class="card shadow mb-4">
                         <div class="card-body text-center">
                             <div class="avatar avatar-lg mt-4">
-                                <a href="">
-                                    <img src="{{ URL::asset('assets/admin-assets/assets/avatars/face-4.jpg') }}" alt="..." class="avatar-img rounded-circle">
+                                <a href="{{ route('users.update',$user->id) }}">
+                                    <img src="{{ isset($user->avatar) ? URL::asset('storage/'.$user->avatar) : URL::asset('assets/admin-assets/assets/avatars/avatar.png') }}" alt="..." class="avatar-img rounded-circle">
                                 </a>
                             </div>
                             <div class="card-text my-2">
-                                <strong class="card-title my-0">{{ $user->name }} </strong>
+                                <strong class="card-title my-0"><a href="{{ route('users.update',$user->id) }}">{{ $user->name }} </a></strong>
                                 <p class="small"><span class="badge badge-light text-muted">{{ $user->role->name }}</span></p>
                             </div>
                         </div> <!-- ./card-text -->
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn mb-2 mr-3 btn-secondary" data-dismiss="modal">Hayır</button>
-                            <a href="javascript:;" onclick="document.getElementById('delete-user{{$user->id}}').submit();" class="btn mb-2 btn-primary">Evet</a>
+                        <div class="card-footer">
+                            <div class="row align-items-center justify-content-between">
+                                <div class="col-auto">
+                                    <?php $postCount = 0; ?>
+                                    @foreach($posts as $post)
+                                        @if($post->user_id == $user->id)
+                                            <?php $postCount++; ?>
+                                        @endif
+                                    @endforeach
+                                        <a href="{{ route('posts.index','user='.$user->id) }}"><small class="text-dark">Postlar : <b>{{ $postCount }} Adet</b></small></a>
+                                </div>
+                                <div>
+                                    @if($user->id != \Illuminate\Support\Facades\Auth::id())
+                                        <a href="javascript;;" data-toggle="modal" data-target="#defaultModal{{$user->id}}"><i class="fa fa-trash mr-2"></i></a>
+                                        <form action="{{ route('users.delete',$user->id) }}" id="delete-user{{$user->id}}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    @endif
+                                </div>
+                            </div>
+                        </div> <!-- /.card-footer -->
+                    </div>
+                </div>
+                <div class="modal fade" id="defaultModal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="defaultModalLabel">Bu Kullanıcıyı Silmek İstediğinize Emin Misiniz?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="card-body text-center">
+                                    <div class="avatar avatar-lg mt-4">
+                                        <a href="">
+                                            <img src="{{ isset($user->avatar) ? URL::asset('storage/'.$user->avatar) : URL::asset('assets/admin-assets/assets/avatars/avatar.png') }}" alt="..." class="avatar-img rounded-circle">
+                                        </a>
+                                    </div>
+                                    <div class="card-text my-2">
+                                        <strong class="card-title my-0">{{ $user->name }} </strong>
+                                        <p class="small"><span class="badge badge-light text-muted">{{ $user->role->name }}</span></p>
+                                    </div>
+                                </div> <!-- ./card-text -->
+                                <div class="d-flex justify-content-center">
+                                    <button type="button" class="btn mb-2 mr-3 btn-secondary" data-dismiss="modal">Hayır</button>
+                                    <a href="javascript:;" onclick="document.getElementById('delete-user{{$user->id}}').submit();" class="btn mb-2 btn-primary">Evet</a>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+
+                            </div>
                         </div>
-
                     </div>
-                    <div class="modal-footer">
-
-                    </div>
+                </div>
+            @endif
+        @endforeach
+    @else
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <b>Kullanıcı bulunamadı.</b>
                 </div>
             </div>
         </div>
 
-    @endforeach
-
+    @endif
 </div>
 @endsection

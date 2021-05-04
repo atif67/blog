@@ -23,9 +23,9 @@ class PostController extends Controller
         return $this->postInterfaces->get();
     }
 
-    public function getById($id)
+    public function getById($slug)
     {
-        return $this->postInterfaces->getById($id);
+        return $this->postInterfaces->getById($slug);
     }
 
     public function createView()
@@ -38,14 +38,14 @@ class PostController extends Controller
         return $this->postInterfaces->post($request);
     }
 
-    public function put(PostUpdateRequest $request,$id)
+    public function put(PostUpdateRequest $request,$slug)
     {
-        return $this->postInterfaces->put($request,$id);
+        return $this->postInterfaces->put($request,$slug);
     }
 
-    public function destroy($id)
+    public function destroy($slug)
     {
-        return $this->postInterfaces->destroy($id);
+        return $this->postInterfaces->destroy($slug);
     }
 
 }
