@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use App\Models\Setting;
 use App\Traits\Admin\ResponseView;
 use Illuminate\Http\Request;
@@ -56,5 +57,33 @@ class SettingsController extends Controller
 
         session()->flash('status', 'ok');
         return redirect()->route('settings');
+    }
+
+    public function trendOn($id)
+    {
+       $post = Post::find($id);
+       if (! $post)
+       {
+            return abort(404);
+       }
+
+       $post->trend_post_status = 1;
+       $post->save();
+
+       return redirect()->back();
+    }
+
+    public function trendOff($id)
+    {
+        $post = Post::find($id);
+        if (! $post)
+        {
+            return abort(404);
+        }
+
+        $post->trend_post_status = 0;
+        $post->save();
+
+        return redirect()->back();
     }
 }

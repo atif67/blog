@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
-    <title>Tiny Dashboard - A Bootstrap Dashboard Template</title>
+    <link rel="icon" href="{{ $settings->favicon }}">
+    <title>{{ $settings->site_title }}</title>
     <!-- Simple bar CSS -->
     <link rel="stylesheet" href="{{ URL::asset('assets/admin-assets/css/simplebar.css') }}">
     <!-- Fonts CSS -->
@@ -32,7 +32,7 @@
               </g>
             </svg>
             </a>
-            <h1 class="h6 mb-3">Blog Panel</h1>
+            <h1 class="h6 mb-3"><a href="{{ route('/') }}">Anasayfa</a></h1>
             <div class="form-group">
                 <label for="inputEmail" class="sr-only">Email</label>
                 <input name="email" type="email" id="inputEmail" class="form-control form-control-lg" placeholder="Email" required="" autofocus="">

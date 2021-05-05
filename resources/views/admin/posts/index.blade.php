@@ -28,15 +28,28 @@
 
                                     </div>
                                     <div class="col-auto pr-0">
-                                        <a href="javascript;;" data-toggle="modal" data-target="#defaultModal{{$post->id}}"><i class="fa fa-trash"></i></a>
+                                        <a href="{{ route('post.detail',$post->slug) }}"><i class="fa fa-eye"></i></a><br>
+                                        <a href="javascript:;" data-toggle="modal" data-target="#defaultModal{{$post->id}}"><i class="fa fa-trash"></i></a>
                                         <form action="{{ route('posts.destroy',$post->slug) }}" id="delete-post{{ $post->slug }}" method="post">
                                             @csrf
                                             @method('DELETE')
                                         </form>
+                                        @if($post->trend_post_status == 0)
+                                            <a href="javascript:;" onclick="document.getElementById('trend-on{{$post->id}}').submit();" data-toggle="popover" data-trigger="hover" data-content="Popüler Post Olarak İşaretle"><i class="fas fa-check"></i></a>
+                                            <form action="{{ route('trend-on',$post->id) }}" id="trend-on{{ $post->id }}" method="post">
+                                                @csrf
+                                            </form>
+                                        @else
+                                            <a href="javascript:;" onclick="document.getElementById('trend-off{{$post->id}}').submit();" data-toggle="popover" data-trigger="hover" data-content="Popüler Post Olarak İşaretlendi. Çıkartmak İçin Tıklayın."><i class="fa fa-star"></i></a>
+                                            <form action="{{ route('trend-off',$post->id) }}" id="trend-off{{ $post->id }}" method="post">
+                                                @csrf
+                                            </form>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <hr>
                         <!-- DELETE MODAL -->
                         <div class="modal fade" id="defaultModal{{$post->id}}" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -70,4 +83,20 @@
 
         </div>
     </div>
+@endsection
+
+@section('head')
+    <style>
+        .popover-content {
+            color: black;
+        }
+    </style>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="popover"]').popover();
+        });
+    </script>
 @endsection

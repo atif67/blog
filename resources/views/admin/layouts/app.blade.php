@@ -78,6 +78,12 @@
                 <span>Menü</span>
             </p>
             <ul class="navbar-nav flex-fill w-100 mb-2">
+                <li class="nav-item">
+                    <a href="{{ route('/') }}" class=" nav-link">
+                        <i class="fas fa-home"></i>
+                        <span class="ml-3 item-text">Anasayfa</span>
+                    </a>
+                </li>
                 <li class="nav-item {{ preg_match('/posts/',request()->url()) ? 'active' : '' }}">
                     <a href="{{ route('posts.index') }}" class=" nav-link">
                         <i class="fas fa-paste"></i>

@@ -13,10 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('test');
-});
-
+Route::get('/', [\App\Http\Controllers\HomeController::class,'get'])->name('/');
+Route::get('post/{slug}',[\App\Http\Controllers\HomeController::class,'postDetail'])->name('post.detail');
 
 
 
@@ -63,4 +61,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function (){
 
     Route::get('settings',[\App\Http\Controllers\Admin\SettingsController::class,'get'])->name('settings');
     Route::put('settings',[\App\Http\Controllers\Admin\SettingsController::class,'put'])->name('settings');
+
+    Route::post('trend-on/{id}',[\App\Http\Controllers\Admin\SettingsController::class,'trendOn'])->name('trend-on');
+    Route::post('trend-off/{id}',[\App\Http\Controllers\Admin\SettingsController::class,'trendOff'])->name('trend-off');
 });

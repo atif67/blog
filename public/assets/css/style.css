@@ -7,7 +7,7 @@ is the file you need to edit to change the look of the
 theme.
 ---------------------------------------------------- */
 /*=====================================================================
-@Template Name: HostHub Construction 
+@Template Name: HostHub Construction
 @Developed By: Naim Lasker
 Author E-mail: naimlasker@gmail.com
 
@@ -84,7 +84,7 @@ button:focus {
 /*---------------------------------------------------- */
 /*----------------------------------------------------*/
 .section_gap {
-  padding: 200px 0; }
+   }
   @media (max-width: 1199px) {
     .section_gap {
       padding: 80px 0; } }
@@ -96,7 +96,7 @@ button:focus {
       padding-top: 80px; } }
 
 .section_gap_bottom {
-  padding-bottom: 200px; }
+  padding-bottom: 50px; }
   @media (max-width: 1199px) {
     .section_gap_bottom {
       padding-bottom: 80px; } }
@@ -617,7 +617,7 @@ button:focus {
 
 /*========= blog_categorie_area css ===========*/
 .blog_categorie_area {
-  padding-bottom: 80px; }
+   }
 
 .categories_post {
   position: relative;

@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\HomeInterface;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected $homeInterface;
+
+    public function __construct(HomeInterface $homeInterface)
     {
-        $this->middleware('auth');
+        $this->homeInterface = $homeInterface;
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+    public function get()
     {
-        return view('home');
+        return $this->homeInterface->get();
+    }
+
+    public function postDetail($slug)
+    {
+        return $this->homeInterface->postDetail($slug);
     }
 }

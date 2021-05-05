@@ -24,6 +24,10 @@ class UserRepository implements UserInterface
 
     public function loginView()
     {
+        if (Auth::user())
+        {
+            return redirect()->route('admin.home');
+        }
         return $this->view('admin.login.login');
     }
 
