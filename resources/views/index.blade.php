@@ -2,22 +2,37 @@
 
 @section('content')
 
-    <div class="row justify-content-center">
-        <div class="col-lg-8 text-center">
-            <div class="main_title">
-                <h2>Keşfet</h2>
-                <b class="text-primary">Tüm Postlar</b>
+    @if(!request()->query('search'))
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="main_title">
+                    <h2>Keşfet</h2>
+                </div>
             </div>
         </div>
-    </div>
-
-    <section class="features_area">
+    @else
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="main_title">
+                    <h2>{{ request()->query('search') }}</h2>
+                    @if($foundPost != 0)
+                        <b class="text-primary">İle İlgili Postlar</b>
+                    @else
+                        <h2 class="text-primary">İle İlgili Hiç Post Bulunamadı...</h2>
+                        <h4>Diğer postlara göz atın.</h4>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
+    <section class="features_area lazy">
         <div class="container">
             <div class="row feature_inner">
                 @foreach($posts as $post)
                 <div class="col-lg-4 col-md-4">
                     <a href="{{ route('post.detail',$post->slug) }}" class="text-dark">
                         <div class="feature_item">
+                            <img src="{{ isset($post->image) ? URL::asset('storage/'.$post->image) : '' }}" alt="" width="100%">
                             <h4>{{ $post->title }}</h4>
                             <p>{{ $post->summary }}</p>
                             @foreach($users as $user)
@@ -33,30 +48,21 @@
         </div>
     </section>
 
+
+
 @endsection
 
 @section('paginator')
-    <nav class="blog-pagination justify-content-center d-flex">
-        <ul class="pagination">
-            <li class="page-item">
-                <a href="#" class="page-link" aria-label="Previous">
-                <span aria-hidden="true">
-                    <span class="lnr lnr-chevron-left"></span>
-                </span>
-                </a>
-            </li>
-            <li class="page-item active"><a href="#" class="page-link">01</a></li>
-            <li class="page-item"><a href="#" class="page-link">02</a></li>
-            <li class="page-item"><a href="#" class="page-link">03</a></li>
-            <li class="page-item"><a href="#" class="page-link">04</a></li>
-            <li class="page-item"><a href="#" class="page-link">09</a></li>
-            <li class="page-item">
-                <a href="#" class="page-link" aria-label="Next">
-                <span aria-hidden="true">
-                    <span class="lnr lnr-chevron-right"></span>
-                </span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    {{ $posts->appends(['search' => request()->query('search')])->links('pagination::bootstrap-4') }}
+@endsection
+
+@section('script')
+    <!--
+    <script>
+        $(function() {
+            $('.lazy').lazy();
+        });
+    </script>
+
+    -->
 @endsection

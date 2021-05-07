@@ -14,21 +14,54 @@
                                 <table class="table datatables" id="dataTable-1">
                                     <thead>
                                     <tr>
-                                        <th>#</th>
                                         <th>Post</th>
-                                        <th>Yorum Sayısı</th>
+                                        <th>Kullanıcı Adı</th>
+                                        <th>Onay Durumu</th>
                                         <th>İşlem</th>
-
+                                        <th>İçerik</th>
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    @foreach($comments as $comment)
+                                        <tr>
 
-                                    <tr>
-                                        <td>1</td>
-                                        <td>9022 Suspendisse Rd.</td>
-                                        <td>32</td>
-                                        <td><a href="" class="btn btn-secondary btn-sm">Gözat</a></td>
-                                    </tr>
+                                            <td>{{ $comment->post->title }}</td>
+                                            <td>{{ $comment->name }}</td>
+                                            <td>
+                                                @if($comment->confirmation_status == 1)
+                                                    Onaylandı
+                                                @else
+                                                    Beklemede
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($comment->confirmation_status == 0)
+                                                    <a href="" class="text-success-dark"><i class="fa fa-check"></i></a>
+                                                @endif
+                                                <a href="" class="text-danger-dark"><i class="fa fa-times"></i></a>
+                                            </td>
+                                            <td><a href="javascript;;" data-toggle="modal" data-target="#comment{{$comment->id}}" class="btn btn-secondary btn-sm">Yorum İçeriği</a></td>
+                                        </tr>
+                                        <div class="modal fade" id="comment{{$comment->id}}" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="defaultModalLabel">Kategori Ekle</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>{{ $comment->content }}</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Kapat</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    @endforeach
 
                                     </tbody>
                                 </table>

@@ -21,9 +21,8 @@
         </div>
     </div>
 <div class="row">
-    @if($users->count() > 1)
+    @if($users->count() > 0)
         @foreach($users as $user)
-            @if($user->id != \Illuminate\Support\Facades\Auth::id())
                 <div class="col-md-3">
                     <div class="card shadow mb-4">
                         <div class="card-body text-center">
@@ -94,7 +93,6 @@
                         </div>
                     </div>
                 </div>
-            @endif
         @endforeach
     @else
         <div class="container">

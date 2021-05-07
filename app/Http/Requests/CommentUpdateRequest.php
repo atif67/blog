@@ -24,8 +24,10 @@ class CommentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'content' =>  'required|max:2500',
-            'post_id' => 'required'
+            'post_id' => 'required',
+            'content' => 'required|max:2500',
+            'name' => 'required|max:30',
+            'email' => 'required|max:40'
         ];
     }
 }

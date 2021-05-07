@@ -141,6 +141,7 @@ class PostRepository implements PostInterface
         $post->save();
 
         $post_tag = PostTag::where('post_id',$post->id)->get()->toArray();
+
         foreach ($request->input('tag_id') as $tag_id)
         {
             foreach ($post_tag as $item){
@@ -148,7 +149,6 @@ class PostRepository implements PostInterface
                 $postTag->tag_id = $tag_id;
                 $postTag->save();
             }
-
         }
 
         return redirect()->route('posts.index');

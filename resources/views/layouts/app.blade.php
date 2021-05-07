@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
 
 <head>
     <!-- Required meta tags -->
@@ -26,7 +26,7 @@
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
-                <a class="navbar-brand logo_h" href="index.html"><img src="img/logo.png" alt=""></a>
+                <a class="navbar-brand logo_h" href="{{ route('/') }}"><img src="{{ URL::asset('assets/img/logo.png') }}" alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="icon-bar"></span>
@@ -36,12 +36,14 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <aside class="single_sidebar_widget search_widget col-md-4">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Post Ara" style="border:none">
-                            <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button"><i class="lnr lnr-magnifier"></i></button>
-                                </span>
-                        </div><!-- /input-group -->
+                        <form action="{{ route('/') }}" method="get">
+                            <div class="input-group">
+                                    <input type="text" name="search" class="form-control" placeholder="Post Ara" style="border:none">
+                                    <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit"><i class="lnr lnr-magnifier"></i></button>
+                                    </span>
+                            </div>
+                        </form>
                     </aside>
                     <br>
                     <ul class="nav navbar-nav menu_nav justify-content-end">
@@ -116,12 +118,18 @@
                         Yeni bir paylaşım olduğu zaman, abone olduğunuz mail adresine bildirim gelsin.
                     </p>
                     <div class="subcribe-form">
-                        <form action="" method="get" class="subscription relative">
-                            <input name="EMAIL" placeholder="Email Adresiniz" type="email">
+
+                        <form action="{{ route('subscribe') }}" method="post" class="subscription relative">
+                            @csrf
+                            <input name="email" placeholder="Email Adresiniz" type="email" required>
 
                             <button class="primary-btn hover d-inline">Yenilikleri Yakala</button>
                             <div class="info"></div>
                         </form>
+                        @if(session()->has('mail') == 'ok')
+                            <br>
+                            <div class="alert alert-success col-md-4 mx-auto">Mail Adresiniz Başarıyla Gönderildi.</div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -147,7 +155,7 @@
         </div>
         <div class="row footer_bottom justify-content-center">
             <p class="col-lg-8 col-sm-12 footer-text">
-                Tüm Hakları Saklıdır Powered By <a href="https://ahmetatifdalbay.com/">Atıf</a>
+                Tüm Hakları Saklıdır Powered By <a href="https://ahmetatifdalbay.com/" target="_blank">Atıf</a>
             </p>
         </div>
     </div>
@@ -168,5 +176,10 @@
 <script src="{{ URL::asset('assets/js/jquery.ajaxchimp.min.js') }}"></script>
 <script src="{{ URL::asset('assets/js/mail-script.js') }}"></script>
 <script src="{{ URL::asset('assets/js/theme.js') }}"></script>
+
+<!-- <script type="text/javascript" src="{{ URL::asset('js/jquery.lazy.min.js') }}"></script>-->
+
+@yield('script')
+
 </body>
 </html>

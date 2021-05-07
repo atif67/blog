@@ -9,4 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Comment extends Model
 {
     use HasFactory, SoftDeletes;
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class,'post_id','id');
+    }
 }

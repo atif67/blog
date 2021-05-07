@@ -18,9 +18,6 @@ Route::get('post/{slug}',[\App\Http\Controllers\HomeController::class,'postDetai
 
 
 
-Route::get('admin/comments',function (){
-    return view('admin.comments.index');
-})->name('comments.index');
 
 Route::get('admin/login',[\App\Http\Controllers\Admin\UserController::class,'loginView'])->name('login');
 Route::post('admin/login',[\App\Http\Controllers\Admin\UserController::class,'login'])->name('login');
@@ -38,6 +35,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function (){
     Route::post('posts/new',[\App\Http\Controllers\Admin\PostController::class,'post'])->name('posts.create');
     Route::put('posts/{slug}',[\App\Http\Controllers\Admin\PostController::class,'put'])->name('posts.update');
     Route::delete('post/{slug}',[\App\Http\Controllers\Admin\PostController::class,'destroy'])->name('posts.destroy');
+
+    Route::get('comments',[\App\Http\Controllers\CommentController::class,'get'])->name('comments.index');
+    Route::post('comments/{id}',[\App\Http\Controllers\CommentController::class,'post'])->name('comments.create');
 
     Route::get('profile',[\App\Http\Controllers\Admin\UserController::class,'profile'])->name('users.profile');
     Route::put('update-profile/{id}',[\App\Http\Controllers\Admin\UserController::class,'updateProfile'])->name('users.update.profile');
@@ -64,4 +64,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function (){
 
     Route::post('trend-on/{id}',[\App\Http\Controllers\Admin\SettingsController::class,'trendOn'])->name('trend-on');
     Route::post('trend-off/{id}',[\App\Http\Controllers\Admin\SettingsController::class,'trendOff'])->name('trend-off');
+
+    Route::post('subscribe',[\App\Http\Controllers\SubscribeController::class,'post'])->name('subscribe');
 });
