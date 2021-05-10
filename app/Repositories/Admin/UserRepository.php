@@ -4,11 +4,11 @@
 namespace App\Repositories\Admin;
 
 
-use App\Http\Requests\UpdatePasswordRequest;
-use App\Http\Requests\UpdateProfileRequest;
-use App\Http\Requests\UserCreateRequest;
-use App\Http\Requests\UserLoginRequest;
-use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\Admin\UpdatePasswordRequest;
+use App\Http\Requests\Admin\UpdateProfileRequest;
+use App\Http\Requests\Admin\UserCreateRequest;
+use App\Http\Requests\Admin\UserLoginRequest;
+use App\Http\Requests\Admin\UserUpdateRequest;
 use App\Interfaces\Admin\UserInterface;
 use App\Models\Post;
 use App\Models\User;
@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserRepository implements UserInterface
 {
@@ -38,9 +39,17 @@ class UserRepository implements UserInterface
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
 
-            return redirect()->route('admin.home');
+            if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2)
+            {
+                $request->session()->regenerate();
+                return redirect()->route('admin.home');
+            }else{
+                Auth::logout();
+                return back()->withErrors([
+                    'status' => 'false'
+                ]);
+            }
         }
 
         return back()->withErrors([
@@ -155,15 +164,14 @@ class UserRepository implements UserInterface
         $user->name = $request->input('name');
         $user->about = $request->input('about');
 
-        if (is_file($request->image))
-        {
-            $generateFileName = now()->unix().rand(); // generate uniq file name
-            $extension = $request->file('image')->extension(); // get file extension
-            $fullName = $generateFileName.'.'.$extension;
+        if (is_file($request->file('image'))){
 
-            $path = $request->file('image')->storeAs('images',$fullName,'public'); // storing file
+
+            $path = Storage::disk('public_uploads')->put('images',$request->file('image'));
             $user->avatar = $path;
+
         }
+
         $user->save();
         session()->flash('status', 'ok');
         return redirect()->route('users.profile');
@@ -178,17 +186,19 @@ class UserRepository implements UserInterface
             return abort(404);
         }
 
-        if (Auth::attempt(['email' => Auth::user()->email, 'password' => $request->input('old_pass')]))
+        if (Hash::check($request->old_pass, auth()->user()->password))
         {
             $user = User::find(auth()->id());
             $user->password = Hash::make($request->input('new_pass'));
             $user->save();
             session()->flash('status', 'ok');
             return redirect()->route('users.profile');
+
         }else{
             session()->flash('error', 'invalid_pass');
             return redirect()->back();
         }
+
     }
 
     public function destroy($id)

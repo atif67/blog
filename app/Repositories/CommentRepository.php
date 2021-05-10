@@ -4,14 +4,25 @@
 namespace App\Repositories;
 
 
-use App\Http\Requests\CommentCreateRequest;
+use App\Http\Requests\Admin\CommentCreateRequest;
 use App\Interfaces\CommentInterface;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Setting;
+use App\Traits\Admin\ResponseView;
+use Illuminate\Support\Facades\Auth;
 
 class CommentRepository implements CommentInterface
 {
+    use ResponseView;
+
+    public function get()
+    {
+        // TODO: Implement get() method.
+        $comments = Comment::orderBy('id','desc')->with('post')->get();
+        return view('admin.comments.index')->with(['comments' => $comments]);
+    }
+
     public function post(CommentCreateRequest $request,$postId)
     {
         // TODO: Implement post() method.
@@ -46,10 +57,28 @@ class CommentRepository implements CommentInterface
         }
     }
 
-    public function get()
+    public function commentConfirmOrDelete($id,$case)
     {
-        // TODO: Implement get() method.
-        $comments = Comment::orderBy('id','desc')->with('post')->get();
-        return view('admin.comments.index')->with(['comments' => $comments]);
+        $this->isAdmin();
+        $this->isEditor();
+
+        $comment = Comment::find($id);
+        if (!$comment)
+        {
+            return abort(404);
+        }
+
+        switch ($case){
+            case 1:
+                $comment->confirmation_status = 1;
+                $comment->save();
+                return redirect()->back();
+            case 2:
+                Comment::destroy($id);
+                return redirect()->back();
+            default:
+                return abort(404);
+        }
     }
+
 }

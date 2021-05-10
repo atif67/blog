@@ -8,7 +8,7 @@
                     <div class="single-post row">
                         <div class="col-lg-12">
                             <div class="feature-img">
-                                <img class="img-fluid" src="{{ URL::asset('storage/'.$post->image) }}" style="width: 100%; height: auto" alt="">
+                                <img class="img-fluid" src="{{ URL::asset('uploads/'.$post->image) }}" style="width: 100%; height: auto" alt="">
                             </div>
                         </div>
                         <div class="col-lg-12 col-md-12 blog_details">
@@ -36,7 +36,7 @@
                                 <li><a href="#">{{ $publishDate[0] }}<i class="lnr lnr-calendar-full"></i></a></li>
                                 <!-- <li><a href="#">1.2M Views<i class="lnr lnr-eye"></i></a></li>-->
                                 @if($post->comment_status == 1)
-                                    <li><a href="#">Yorumlar {{ $comments->count() }}<i class="lnr lnr-bubble"></i></a></li>
+                                    <li><a href="#">Yorumlar {{ $confirmedCommentsCount }}<i class="lnr lnr-bubble"></i></a></li>
                                 @endif
                             </ul>
                         </div>
@@ -46,7 +46,7 @@
                         <div class="alert alert-success">Yorumunuz modoratörler tarafından onaylanmak üzere başarıyla gönderilmiştir.</div>
                     @endif
 
-                    @if($comments->count() > 0)
+                    @if($confirmedCommentsCount > 0)
                         <div class="comments-area">
                             <h4>Yorumlar</h4>
                             <div class="comment-list">
@@ -55,7 +55,7 @@
                                             <div class="single-comment justify-content-between d-flex">
                                                 <div class="user justify-content-between d-flex">
                                                     <div class="thumb">
-                                                        <img src="{{ URL::asset('storage/avatar.png') }}" width="50" height="50" alt="">
+                                                        <img src="{{ URL::asset('uploads/images/avatar.png') }}" width="50" height="50" alt="">
                                                     </div>
                                                     <div class="desc">
                                                         <h5><a href="#">{{ $comment->name }}</a></h5>
@@ -96,7 +96,7 @@
                 <div class="col-lg-4">
                     <div class="blog_right_sidebar">
                         <aside class="single_sidebar_widget author_widget">
-                            <img class="author_img rounded-circle" src="{{ isset($user->avatar) ? URL::asset('storage/'.$user->avatar) : URL::asset('storage/avatar.png') }}" width="130" height="130" alt="">
+                            <img class="author_img rounded-circle" src="{{ isset($user->avatar) ? URL::asset('uploads/'.$user->avatar) : URL::asset('uploads/images/avatar.png') }}" width="130" height="130" alt="">
                             <h4>
                                 {{ $user->name }}
                             </h4>
@@ -111,6 +111,8 @@
                                 <a href="#"><i class="fa fa-github"></i></a>
                                 <a href="#"><i class="fa fa-twitter"></i></a>
                                 <a href="#"><i class="fa fa-instagram"></i></a>
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-linkedin"></i></a>
                             </div>
                             <p>
                                 {{ $user->about }}

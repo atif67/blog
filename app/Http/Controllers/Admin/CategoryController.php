@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryCreateRequest;
-use App\Http\Requests\CategoryUpdateRequest;
+use App\Http\Requests\Admin\CategoryCreateRequest;
+use App\Http\Requests\Admin\CategoryUpdateRequest;
 use App\Interfaces\Admin\CategoryInterface;
 
 class CategoryController extends Controller

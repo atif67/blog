@@ -4,8 +4,8 @@
 namespace App\Interfaces\Admin;
 
 
-use App\Http\Requests\CategoryCreateRequest;
-use App\Http\Requests\CategoryUpdateRequest;
+use App\Http\Requests\Admin\CategoryCreateRequest;
+use App\Http\Requests\Admin\CategoryUpdateRequest;
 
 interface CategoryInterface
 {

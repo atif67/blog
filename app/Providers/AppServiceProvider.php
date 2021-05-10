@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $settings = Setting::find(1);
-        $trendPosts = Post::where('trend_post_status',1)->get(['slug','title','summary','user_id']);
+        $trendPosts = Post::where('trend_post_status',1)->orderBy('id','desc')->get(['slug','title','summary','user_id']);
         View::share(['settings' => $settings, 'trendPosts' => $trendPosts]);
     }
 }

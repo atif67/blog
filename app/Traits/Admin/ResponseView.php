@@ -60,4 +60,14 @@ trait ResponseView
             return abort(404);
         }
     }
+
+    public function isEditor()
+    {
+        if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2)
+        {
+
+        }else{
+            return abort(404);
+        }
+    }
 }

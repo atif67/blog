@@ -4,8 +4,8 @@
 namespace App\Interfaces\Admin;
 
 
-use App\Http\Requests\TagCreateRequest;
-use App\Http\Requests\TagUpdateRequest;
+use App\Http\Requests\Admin\TagCreateRequest;
+use App\Http\Requests\Admin\TagUpdateRequest;
 
 interface TagInterface
 {

@@ -4,8 +4,8 @@
 namespace App\Interfaces\Admin;
 
 
-use App\Http\Requests\PostCreateRequest;
-use App\Http\Requests\PostUpdateRequest;
+use App\Http\Requests\Admin\PostCreateRequest;
+use App\Http\Requests\Admin\PostUpdateRequest;
 
 interface PostInterface
 {

@@ -4,7 +4,7 @@
 namespace App\Interfaces;
 
 
-use App\Http\Requests\CommentCreateRequest;
+use App\Http\Requests\Admin\CommentCreateRequest;
 
 interface CommentInterface
 {
@@ -19,4 +19,10 @@ interface CommentInterface
      * @method (GET)
      */
     public function get();
+
+    /*
+     *
+     * @method (POST)
+     */
+    public function commentConfirmOrDelete($id,$case);
 }

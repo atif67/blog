@@ -24,7 +24,6 @@
                                     <tbody>
                                     @foreach($comments as $comment)
                                         <tr>
-
                                             <td>{{ $comment->post->title }}</td>
                                             <td>{{ $comment->name }}</td>
                                             <td>
@@ -36,9 +35,15 @@
                                             </td>
                                             <td>
                                                 @if($comment->confirmation_status == 0)
-                                                    <a href="" class="text-success-dark"><i class="fa fa-check"></i></a>
+                                                    <a href="javascript:;" onclick="document.getElementById('confirm-comment{{$comment->id}}').submit();" class="text-success-dark"><i class="fa fa-check"></i></a>
+                                                    <form action="{{ route('comments.confirm-or-delete',['id' => $comment->id, 'case' => 1]) }}" method="post" id="confirm-comment{{$comment->id}}" class="d-inline">
+                                                        @csrf
+                                                    </form>
                                                 @endif
-                                                <a href="" class="text-danger-dark"><i class="fa fa-times"></i></a>
+                                                <a href="javascript:;" onclick="document.getElementById('delete-comment{{$comment->id}}').submit();" class="text-danger-dark"><i class="fa fa-times"></i></a>
+                                                <form action="{{ route('comments.confirm-or-delete',['id' => $comment->id, 'case' => 2]) }}" method="post" id="delete-comment{{$comment->id}}" class="d-inline">
+                                                    @csrf
+                                                </form>
                                             </td>
                                             <td><a href="javascript;;" data-toggle="modal" data-target="#comment{{$comment->id}}" class="btn btn-secondary btn-sm">Yorum İçeriği</a></td>
                                         </tr>

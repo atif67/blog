@@ -4,7 +4,11 @@
     <div class="col-md-12 mb-4">
         <div class="card shadow">
             <div class="card-header">
-                <strong class="card-title">Yazılar</strong>
+                <strong class="card-title">Yazılar - Toplam {{ $postsAllCount }} Adet</strong>
+                <form id="search" class="d-inline">
+                    <input class="ml-3" name="search" type="text" placeholder="Ara..." style="border: none; border-bottom: 1px solid darkgray;">
+                    <a href="javascript:;" onclick="document.getElementById('search').submit();"><i class="btn fa fa-search"></i></a>
+                </form>
                 <strong><a class="float-right small card-title" href="{{ route('posts.create') }}">Yeni Ekle</a></strong>
             </div>
             <div class="card-body">
@@ -76,13 +80,20 @@
                         <!-- / DELETE MODAL -->
                     @endforeach
                 @else
-                    <p>Henüz post yok..</p>
+                    <p>Post Bulunamadı</p>
                 @endif
 
             </div>
 
         </div>
     </div>
+
+    {{ $posts->appends([
+        'category-id' => request()->query('category-id'),
+        'user' => request()->query('user'),
+        'search' => request()->query('search')
+     ])->links('pagination::bootstrap-4') }}
+
 @endsection
 
 @section('head')

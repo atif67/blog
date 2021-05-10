@@ -4,10 +4,11 @@
 namespace App\Repositories\Admin;
 
 
-use App\Http\Requests\CategoryCreateRequest;
-use App\Http\Requests\CategoryUpdateRequest;
+use App\Http\Requests\Admin\CategoryCreateRequest;
+use App\Http\Requests\Admin\CategoryUpdateRequest;
 use App\Interfaces\Admin\CategoryInterface;
 use App\Models\Category;
+use App\Models\Post;
 use App\Traits\Admin\ResponseView;
 
 class CategoryRepository implements CategoryInterface

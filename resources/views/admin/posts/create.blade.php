@@ -42,7 +42,7 @@
                         @if(isset($post))
                             @if($post->image)
                                 <div class="form-group mb-3">
-                                    <img src="{{ URL::asset('storage/'.$post->image) }}" alt="">
+                                    <img src="{{ URL::asset('uploads/'.$post->image) }}" width="200" height="auto" alt="">
                                 </div>
                             @endif
                         @endif

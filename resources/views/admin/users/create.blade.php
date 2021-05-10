@@ -11,10 +11,9 @@
                 <div class="">
                     <a href="{{ route('users.create') }}" class="btn btn-primary btn-sm mr-2"><i class="fa fa-plus"></i></a>
                     <a href="{{ route('users.index') }}" class="btn btn-secondary btn-sm">Hepsi</a>
-                    <a href="{{ route('users.index').'?role=1' }}" class="btn btn-primary btn-sm">Yöneticiler</a>
-                    <a href="{{ route('users.index').'?role=2' }}" class="btn btn-secondary btn-sm">Editörler</a>
-                    <a href="{{ route('users.index').'?role=3' }}" class="btn btn-primary btn-sm">Yazarlar</a>
-                    <a href="{{ route('users.index').'?role=4' }}" class="btn btn-secondary btn-sm">Aboneler</a>
+                    <a href="?role=1" class="btn btn-primary btn-sm">Yöneticiler</a>
+                    <a href="?role=2" class="btn btn-secondary btn-sm">Editörler</a>
+                    <a href="?role=3" class="btn btn-primary btn-sm">Üyeler</a>
                 </div>
             </div>
         </div>

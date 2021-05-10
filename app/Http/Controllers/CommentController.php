@@ -4,7 +4,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Requests\CommentCreateRequest;
+use App\Http\Requests\Admin\CommentCreateRequest;
 use App\Interfaces\CommentInterface;
 
 class CommentController extends Controller
@@ -24,5 +24,10 @@ class CommentController extends Controller
     public function get()
     {
         return $this->commentInterface->get();
+    }
+
+    public function commentConfirmOrDelete($id,$case)
+    {
+        return $this->commentInterface->commentConfirmOrDelete($id,$case);
     }
 }

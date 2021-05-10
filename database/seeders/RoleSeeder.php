@@ -24,12 +24,8 @@ class RoleSeeder extends Seeder
                 'short_title' => 'editor'
             ],
             [
-                'name' => 'Yazar',
-                'short_title' => 'writer'
-            ],
-            [
-                'name' => 'Abone',
-                'short_title' => 'subscriber'
+                'name' => 'Üye',
+                'short_title' => 'member'
             ]
         ]);
     }

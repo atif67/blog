@@ -23,8 +23,14 @@ Route::get('admin/login',[\App\Http\Controllers\Admin\UserController::class,'log
 Route::post('admin/login',[\App\Http\Controllers\Admin\UserController::class,'login'])->name('login');
 Route::post('admin/logout',[\App\Http\Controllers\Admin\UserController::class,'logout'])->name('logout');
 
+Route::post('comments/{id}',[\App\Http\Controllers\CommentController::class,'post'])->name('comments.create');
+
+
 Route::middleware(['auth'])->group(function (){
     Route::get('admin',[\App\Http\Controllers\Admin\HomeController::class,'get'])->name('admin.home');
+    Route::get('profile',[\App\Http\Controllers\UserController::class,'get'])->name('profile');
+    Route::get('new/post',[\App\Http\Controllers\PostController::class,'createPage'])->name('user.post.create');
+    Route::post('new/post',[\App\Http\Controllers\PostController::class,'post'])->name('user.post.create');
 });
 
 Route::middleware(['auth'])->prefix('admin')->group(function (){
@@ -37,7 +43,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function (){
     Route::delete('post/{slug}',[\App\Http\Controllers\Admin\PostController::class,'destroy'])->name('posts.destroy');
 
     Route::get('comments',[\App\Http\Controllers\CommentController::class,'get'])->name('comments.index');
-    Route::post('comments/{id}',[\App\Http\Controllers\CommentController::class,'post'])->name('comments.create');
+    Route::post('comments/confirm-or-delete/id/{id}/case/{case}',[\App\Http\Controllers\CommentController::class,'commentConfirmOrDelete'])->name('comments.confirm-or-delete');
 
     Route::get('profile',[\App\Http\Controllers\Admin\UserController::class,'profile'])->name('users.profile');
     Route::put('update-profile/{id}',[\App\Http\Controllers\Admin\UserController::class,'updateProfile'])->name('users.update.profile');
@@ -67,3 +73,4 @@ Route::middleware(['auth'])->prefix('admin')->group(function (){
 
     Route::post('subscribe',[\App\Http\Controllers\SubscribeController::class,'post'])->name('subscribe');
 });
+

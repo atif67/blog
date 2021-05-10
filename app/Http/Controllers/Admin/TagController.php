@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TagCreateRequest;
-use App\Http\Requests\TagUpdateRequest;
+use App\Http\Requests\Admin\TagCreateRequest;
+use App\Http\Requests\Admin\TagUpdateRequest;
 use App\Interfaces\Admin\TagInterface;
 
 class TagController extends Controller

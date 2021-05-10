@@ -32,7 +32,7 @@
                 <div class="col-lg-4 col-md-4">
                     <a href="{{ route('post.detail',$post->slug) }}" class="text-dark">
                         <div class="feature_item">
-                            <img src="{{ isset($post->image) ? URL::asset('storage/'.$post->image) : '' }}" alt="" width="100%">
+                            <img src="{{ isset($post->image) ? URL::asset('uploads/'.$post->image) : '' }}" alt="" width="100%">
                             <h4>{{ $post->title }}</h4>
                             <p>{{ $post->summary }}</p>
                             @foreach($users as $user)
@@ -48,21 +48,4 @@
         </div>
     </section>
 
-
-
-@endsection
-
-@section('paginator')
-    {{ $posts->appends(['search' => request()->query('search')])->links('pagination::bootstrap-4') }}
-@endsection
-
-@section('script')
-    <!--
-    <script>
-        $(function() {
-            $('.lazy').lazy();
-        });
-    </script>
-
-    -->
 @endsection

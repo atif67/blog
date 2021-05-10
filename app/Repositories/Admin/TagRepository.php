@@ -4,8 +4,8 @@
 namespace App\Repositories\Admin;
 
 
-use App\Http\Requests\TagCreateRequest;
-use App\Http\Requests\TagUpdateRequest;
+use App\Http\Requests\Admin\TagCreateRequest;
+use App\Http\Requests\Admin\TagUpdateRequest;
 use App\Interfaces\Admin\TagInterface;
 use App\Models\Tag;
 use App\Traits\Admin\ResponseView;

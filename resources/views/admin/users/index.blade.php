@@ -13,8 +13,7 @@
                     <a href="{{ route('users.index') }}" class="btn btn-secondary btn-sm">Hepsi</a>
                     <a href="?role=1" class="btn btn-primary btn-sm">Yöneticiler</a>
                     <a href="?role=2" class="btn btn-secondary btn-sm">Editörler</a>
-                    <a href="?role=3" class="btn btn-primary btn-sm">Yazarlar</a>
-                    <a href="?role=4" class="btn btn-secondary btn-sm">Aboneler</a>
+                    <a href="?role=3" class="btn btn-primary btn-sm">Üyeler</a>
                 </div>
             </div>
 
@@ -28,7 +27,7 @@
                         <div class="card-body text-center">
                             <div class="avatar avatar-lg mt-4">
                                 <a href="{{ route('users.update',$user->id) }}">
-                                    <img src="{{ isset($user->avatar) ? URL::asset('storage/'.$user->avatar) : URL::asset('assets/admin-assets/assets/avatars/avatar.png') }}" alt="..." class="avatar-img rounded-circle">
+                                    <img src="{{ isset($user->avatar) ? URL::asset('uploads/'.$user->avatar) : URL::asset('uploads/images/avatar.png') }}" alt="..." class="avatar-img rounded-circle">
                                 </a>
                             </div>
                             <div class="card-text my-2">
@@ -73,7 +72,7 @@
                                 <div class="card-body text-center">
                                     <div class="avatar avatar-lg mt-4">
                                         <a href="">
-                                            <img src="{{ isset($user->avatar) ? URL::asset('storage/'.$user->avatar) : URL::asset('assets/admin-assets/assets/avatars/avatar.png') }}" alt="..." class="avatar-img rounded-circle">
+                                            <img src="{{ isset($user->avatar) ? URL::asset('uploads/'.$user->avatar) : URL::asset('uploads/images/avatar.png') }}" alt="..." class="avatar-img rounded-circle">
                                         </a>
                                     </div>
                                     <div class="card-text my-2">

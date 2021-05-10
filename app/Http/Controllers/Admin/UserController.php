@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdatePasswordRequest;
-use App\Http\Requests\UpdateProfileRequest;
-use App\Http\Requests\UserCreateRequest;
-use App\Http\Requests\UserLoginRequest;
-use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\Admin\UpdatePasswordRequest;
+use App\Http\Requests\Admin\UpdateProfileRequest;
+use App\Http\Requests\Admin\UserCreateRequest;
+use App\Http\Requests\Admin\UserLoginRequest;
+use App\Http\Requests\Admin\UserUpdateRequest;
 use App\Interfaces\Admin\UserInterface;
 use Illuminate\Http\Request;
 

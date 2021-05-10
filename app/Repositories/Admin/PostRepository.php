@@ -4,8 +4,8 @@
 namespace App\Repositories\Admin;
 
 
-use App\Http\Requests\PostCreateRequest;
-use App\Http\Requests\PostUpdateRequest;
+use App\Http\Requests\Admin\PostCreateRequest;
+use App\Http\Requests\Admin\PostUpdateRequest;
 use App\Interfaces\Admin\PostInterface;
 use App\Models\Category;
 use App\Models\Post;
@@ -14,6 +14,7 @@ use App\Models\Tag;
 use App\Traits\Admin\ResponseView;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -25,24 +26,39 @@ class PostRepository implements PostInterface
     {
         // TODO: Implement get() method.
         $catId = request()->query('category-id');
+
         if ($catId)
         {
-            $posts = Post::where('cat_id',$catId)->with('category')->orderBy('id','desc')->get();
+            $posts = Post::where('cat_id',$catId)->with('category')->orderBy('id','desc')->paginate(20);
         }else
         {
-            $posts = Post::with('category')->orderBy('id','desc')->get();
+            $posts = Post::with('category')->orderBy('id','desc')->paginate(20);
         }
 
         $userId = request()->query('user');
 
         if ($userId)
         {
-            $posts = Post::where('user_id', $userId)->with('category')->orderBy('id','desc')->get();
+            $posts = Post::where('user_id', $userId)->with('category')->orderBy('id','desc')->paginate(20);
+        }
+
+        $search = request()->query('search');
+
+        if ($search){
+
+            $posts = Post::orWhere('title','like','%'.$search.'%')
+                ->orWhere('content','like','%'.$search.'%')
+                ->orderBy('id','desc')
+                ->paginate(20);
+        }else{
+            $posts = Post::with('category')->orderBy('id','desc')->paginate(20);
         }
 
         $post_tags = PostTag::with('posts')->with('tags')->get();
 
-        return view('admin.posts.index')->with(['posts' => $posts, 'post_tags' => $post_tags]);
+        $postsAllCount = Post::count();
+
+        return view('admin.posts.index')->with(['posts' => $posts, 'post_tags' => $post_tags, 'postsAllCount' => $postsAllCount]);
     }
 
     public function getById($slug)
@@ -82,13 +98,11 @@ class PostRepository implements PostInterface
         $post->title = $request->input('title');
         $post->content = $request->input('content');
         $post->summary = $request->input('summary');
-        if (is_file($request->image)){
-            $generateFileName = now()->unix().rand(); // generate uniq file name
-            $extension = $request->file('image')->extension(); // get file extension
-            $fullName = $generateFileName.'.'.$extension;
+        if (is_file($request->file('image'))){
 
-            $path = $request->file('image')->storeAs('images',$fullName,'public'); // storing file
+            $path = Storage::disk('public_uploads')->put('images',$request->file('image'));
             $post->image = $path;
+
         }
         if ($request->input('comment_status'))
         {
@@ -120,12 +134,13 @@ class PostRepository implements PostInterface
         $post->content = $request->input('content');
         $post->summary = $request->input('summary');
 
-        if (is_file($request->image)){
-            $generateFileName = now()->unix().rand(); // generate uniq file name
-            $extension = $request->file('image')->extension(); // get file extension
-            $fullName = $generateFileName.'.'.$extension;
+        if (is_file($request->file('image'))){
 
-            $path = $request->file('image')->storeAs('images',$fullName,'public'); // storing file
+            $path = Storage::disk('public_uploads')->put('images',$request->file('image'));
+            if ($path)
+            {
+                File::delete(public_path('uploads/'.$post->image));
+            }
             $post->image = $path;
         }
         if ($request->comment_status)
@@ -167,7 +182,7 @@ class PostRepository implements PostInterface
         {
             return abort(404);
         }
-
+        File::delete(public_path('uploads/'.$post->image));
         Post::destroy($post->id);
         return redirect()->route('posts.index');
     }

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PostCreateRequest;
-use App\Http\Requests\PostUpdateRequest;
+use App\Http\Requests\Admin\PostCreateRequest;
+use App\Http\Requests\Admin\PostUpdateRequest;
 use App\Interfaces\Admin\PostInterface;
 
 class PostController extends Controller

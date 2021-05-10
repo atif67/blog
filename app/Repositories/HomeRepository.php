@@ -25,35 +25,34 @@ class HomeRepository implements HomeInterface
             $posts = Post::orWhere('title','like','%'.$query.'%')
                 ->orWhere('content','like','%'.$query.'%')
                 ->orderBy('id','desc')
-                ->paginate(20);
+                ->get();
 
-            if (data_get($posts->toArray(),'total') == 0)
+            if ($posts->count() == 0)
             {
                 $foundPost = 0;
-                $posts = Post::inRandomOrder()->orderBy('id','desc')->paginate(20);
+                $posts = Post::inRandomOrder()->orderBy('id','desc')->get();
             }else{
                 $foundPost = $posts->count();
             }
         }elseif ($categoryId){
             $posts = Post::where('cat_id', $categoryId)
                 ->orderBy('id','desc')
-                ->paginate(20);
+                ->get();
 
-            if (data_get($posts->toArray(),'total') == 0)
+            if ($posts->count() == 0)
             {
                 $foundPost = 0;
-                $posts = Post::inRandomOrder()->orderBy('id','desc')->paginate(20);
+                $posts = Post::inRandomOrder()->orderBy('id','desc')->get();
             }else{
                 $foundPost = $posts->count();
             }
         }else{
-            $posts = Post::inRandomOrder()->orderBy('id','desc')->paginate(20);
+            $posts = Post::inRandomOrder()->orderBy('id','desc')->get();
             $foundPost = $posts->count();
         }
 
 
         $users = User::get(['id','name']);
-
         return view('index')->with(['posts' => $posts,'users' => $users, 'foundPost' => $foundPost]);
     }
 
@@ -68,6 +67,7 @@ class HomeRepository implements HomeInterface
         $tags = Tag::all();
         $popularPosts = Post::where('trend_post_status',1)->inRandomOrder()->take(3)->get();
         $comments = Comment::where('post_id',$post->id)->get();
+        $confirmedCommentsCount = Comment::where('post_id',$post->id)->where('confirmation_status',1)->count();
 
         return view('posts.show')->with([
             'post' => $post,
@@ -77,7 +77,9 @@ class HomeRepository implements HomeInterface
             'categories' => $categories,
             'tags' => $tags,
             'popularPosts' => $popularPosts,
-            'comments' => $comments
+            'comments' => $comments,
+            'confirmedCommentsCount' => $confirmedCommentsCount
+
         ]);
     }
 }
