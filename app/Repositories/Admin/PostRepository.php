@@ -25,33 +25,28 @@ class PostRepository implements PostInterface
     public function get()
     {
         // TODO: Implement get() method.
-        $catId = request()->query('category-id');
 
+        $posts = Post::with('category')->orderBy('id','desc')->paginate(20);
+
+        $catId = request()->query('category-id');
         if ($catId)
         {
             $posts = Post::where('cat_id',$catId)->with('category')->orderBy('id','desc')->paginate(20);
-        }else
-        {
-            $posts = Post::with('category')->orderBy('id','desc')->paginate(20);
         }
 
         $userId = request()->query('user');
-
         if ($userId)
         {
             $posts = Post::where('user_id', $userId)->with('category')->orderBy('id','desc')->paginate(20);
         }
 
         $search = request()->query('search');
-
         if ($search){
 
             $posts = Post::orWhere('title','like','%'.$search.'%')
                 ->orWhere('content','like','%'.$search.'%')
                 ->orderBy('id','desc')
                 ->paginate(20);
-        }else{
-            $posts = Post::with('category')->orderBy('id','desc')->paginate(20);
         }
 
         $post_tags = PostTag::with('posts')->with('tags')->get();
@@ -155,15 +150,14 @@ class PostRepository implements PostInterface
         $post->cat_id = $request->input('cat_id');
         $post->save();
 
-        $post_tag = PostTag::where('post_id',$post->id)->get()->toArray();
+        PostTag::where('post_id',$post->id)->delete();
 
-        foreach ($request->input('tag_id') as $tag_id)
+        foreach ($request->input('tag_id') as $tagId)
         {
-            foreach ($post_tag as $item){
-                $postTag = PostTag::find(data_get($item,'id'));
-                $postTag->tag_id = $tag_id;
-                $postTag->save();
-            }
+            $post_tag = new PostTag();
+            $post_tag->post_id = $post->id;
+            $post_tag->tag_id = $tagId;
+            $post_tag->save();
         }
 
         return redirect()->route('posts.index');

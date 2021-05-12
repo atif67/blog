@@ -35,7 +35,7 @@
                     <label for="">Favicon</label>
                     <input name="favicon" type="file" class="form-control" accept="image/x-icon">
                     @if(isset($settings->favicon))
-                        <img src="{{ URL::asset('storage/'.$settings->favicon) }}" alt="">
+                        <img src="{{ URL::asset('uploads/'.$settings->favicon) }}" alt="">
                     @endif
                 </div>
                 <div class="form-group">

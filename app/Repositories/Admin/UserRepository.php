@@ -68,7 +68,7 @@ class UserRepository implements UserInterface
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('/');
     }
 
     public function profile()

@@ -3,7 +3,7 @@
 @section('banner')
     <section class="blog_categorie_area section_gap_top">
         <div class="main_title">
-            <h2>Post Ekle</h2>
+            <h2>{{ isset($post) ? 'Postu Güncelle' : 'Post Ekle' }}</h2>
         </div>
     </section>
 @endsection
@@ -12,7 +12,6 @@
 
     <section class="blog_area single-post-area section_gap bg-white">
         <div class="container">
-
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
@@ -22,7 +21,7 @@
                         <div class="card-body">
                             <div class="col-md-12">
 
-                            <form action="{{ isset($post) ? route('posts.update',$post->slug) : route('user.post.create') }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ isset($post) ? route('user.post.edit',$post->slug) : route('user.post.create') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 @if(isset($post))
                                     @method('PUT')
@@ -40,7 +39,7 @@
                                     <textarea name="summary" class="form-control" id="" cols="30" rows="5" maxlength="250">{{ isset($post) ? $post->summary : old('summary') }}</textarea>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label for="simpleinput">Fotoğraf</label>
+                                    <label for="simpleinput">Kapak Fotoğrafı</label>
                                     <input name="image" type="file" class="form-control" accept="image/x-png,image/gif,image/jpeg">
                                 </div>
                                 @if(isset($post))
@@ -129,6 +128,7 @@
     <script src='{{ URL::asset('assets/admin-assets/js/quill.min.js') }}'></script>
     <script>
         CKEDITOR.replace( 'content' );
+
         $(document).ready(function() {
             $('#tags').select2();
         });

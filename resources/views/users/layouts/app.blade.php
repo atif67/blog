@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/vendors/nice-select/css/nice-select.css') }}">
     <!-- main css -->
     <link rel="stylesheet" href="{{ URL::asset('assets/css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     @yield('head')
 </head>
 
@@ -30,12 +29,39 @@
 <section class="blog_area">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-8">
                 <div class="blog_left_sidebar">
                     @yield('content')
                 </div>
             </div>
+            <div class="col-lg-4">
+                <div class="blog_right_sidebar">
+                    <aside class="single_sidebar_widget author_widget">
+                        <img class="author_img rounded-circle" src="{{ isset(auth()->user()->avatar) ? URL::asset('uploads/'.auth()->user()->avatar) : URL::asset('uploads/images/avatar.png') }}" width="130" height="130" alt="">
+                        <h4>
+                            <a href="{{ route('profile-edit') }}" class="btn btn-sm" style="background-color: white;">Düzenle</a>
+                            <br>
+                            <hr>
+                            {{ auth()->user()->name }}
+                        </h4>
+                        <p>
+                            {{ auth()->user()->about }}
+                        </p>
+                        <div class="social_icon">
+                            <a href="{{ isset($socialLinks->github) ? $socialLinks->github : 'javascript:void(0);' }}"><i class="fa fa-github"></i></a>
+                            <a href="{{ isset($socialLinks->twitter) ? $socialLinks->twitter : 'javascript:void(0);' }}"><i class="fa fa-twitter"></i></a>
+                            <a href="{{ isset($socialLinks->instagram) ? $socialLinks->instagram : 'javascript:void(0);' }}"><i class="fa fa-instagram"></i></a>
+                            <a href="{{ isset($socialLinks->facebook) ? $socialLinks->facebook : 'javascript:void(0);' }}"><i class="fa fa-facebook"></i></a>
+                            <a href="{{ isset($socialLinks->linkedin) ? $socialLinks->linkedin : 'javascript:void(0);'}}"><i class="fa fa-linkedin"></i></a>
+                        </div>
+                        <p>
 
+                        </p>
+                        <div class="br"></div>
+                    </aside>
+                    <br>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -72,14 +98,8 @@
 <script src="{{ URL::asset('assets/js/popper.js') }}"></script>
 <script src="{{ URL::asset('assets/js/bootstrap.min.js') }}"></script>
 <script src="{{ URL::asset('assets/js/stellar.js') }}"></script>
-<script src="{{ URL::asset('assets/vendors/lightbox/simpleLightbox.min.js') }}"></script>
-<script src="{{ URL::asset('assets/vendors/nice-select/js/jquery.nice-select.min.js') }}"></script>
-<script src="{{ URL::asset('assets/vendors/isotope/imagesloaded.pkgd.min.js') }}"></script>
 <script src="{{ URL::asset('assets/vendors/isotope/isotope-min.js') }}"></script>
 <script src="{{ URL::asset('assets/vendors/owl-carousel/owl.carousel.min.js') }}"></script>
-<script src="{{ URL::asset('assets/js/jquery.ajaxchimp.min.js') }}"></script>
-<script src="{{ URL::asset('assets/js/mail-script.js') }}"></script>
-<script src="{{ URL::asset('assets/js/theme.js') }}"></script>
 
 @yield('script')
 

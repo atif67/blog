@@ -19,7 +19,7 @@ class CommentRepository implements CommentInterface
     public function get()
     {
         // TODO: Implement get() method.
-        $comments = Comment::orderBy('id','desc')->with('post')->get();
+        $comments = Comment::orderBy('id','desc')->with(['post','user'])->get();
         return view('admin.comments.index')->with(['comments' => $comments]);
     }
 
@@ -32,12 +32,12 @@ class CommentRepository implements CommentInterface
         if ($postCommentStatus == 1)
         {
             $comment = new Comment();
-            $commentPublishPermission = Setting::find(1);
+            $commentPublishPermission = Setting::find(1); // Yapılan yorumun direkt olarak yayınlanıp yayınlanmadığına göre aksiyon alınıyor.
 
             $comment->post_id = $postId;
-            $comment->name = $request->input('name');
-            $comment->email = $request->input('email');
+            $comment->user_id = Auth::id();
             $comment->content = $request->input('content');
+
             if ($commentPublishPermission->direct_comment_status == 1)
             {
                 $comment->confirmation_status = 1;

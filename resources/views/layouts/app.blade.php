@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="{{ URL::asset('storage/'.$settings->favicon) }}" type="image/png">
+    <link rel="icon" href="{{ URL::asset('uploads/'.$settings->favicon) }}" type="image/png">
     <title>{{ $settings->site_title }}</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ URL::asset('assets/css/bootstrap.css') }}">

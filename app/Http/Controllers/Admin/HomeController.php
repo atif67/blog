@@ -12,11 +12,6 @@ class HomeController extends Controller
 {
     public function get()
     {
-        if (Auth::user()->role_id == 4)
-        {
-            return abort(404);
-        }
-
         return view('admin.index');
     }
 }

@@ -9,6 +9,8 @@ use App\Models\Post;
 use App\Models\Setting;
 use App\Traits\Admin\ResponseView;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class SettingsController extends Controller
@@ -40,11 +42,11 @@ class SettingsController extends Controller
         $setting->site_title = $request->input('site_title');
         if (is_file($request->favicon))
         {
-            $generateFileName = now()->unix().rand(); // generate uniq file name
-            $extension = $request->file('favicon')->extension(); // get file extension
-            $fullName = $generateFileName.'.'.$extension;
-
-            $path = $request->file('favicon')->storeAs('images',$fullName,'public'); // storing file
+            $path = Storage::disk('public_uploads')->put('images',$request->file('favicon'));
+            if ($path)
+            {
+                File::delete(public_path('uploads/'.$setting->favicon));
+            }
             $setting->favicon = $path;
         }
         if ($request->direct_comment_status)

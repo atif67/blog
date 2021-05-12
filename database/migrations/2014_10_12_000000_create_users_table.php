@@ -24,7 +24,8 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
             $table->tinyText('about')->nullable();
             $table->string('avatar')->nullable();
-            $table->integer('role_id')->default(4);
+            $table->integer('role_id')->default(3);
+            $table->integer('social_links_id')->nullable();
         });
     }
 

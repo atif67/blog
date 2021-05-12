@@ -10,8 +10,10 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Models\PostTag;
 use App\Models\Role;
+use App\Models\SocialLink;
 use App\Models\Tag;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class HomeRepository implements HomeInterface
 {
@@ -66,8 +68,9 @@ class HomeRepository implements HomeInterface
         $categories = Category::all();
         $tags = Tag::all();
         $popularPosts = Post::where('trend_post_status',1)->inRandomOrder()->take(3)->get();
-        $comments = Comment::where('post_id',$post->id)->get();
+        $comments = Comment::where('post_id',$post->id)->with('user')->get();
         $confirmedCommentsCount = Comment::where('post_id',$post->id)->where('confirmation_status',1)->count();
+        $socialLinks = SocialLink::where('user_id',Auth::id())->first();
 
         return view('posts.show')->with([
             'post' => $post,
@@ -78,7 +81,8 @@ class HomeRepository implements HomeInterface
             'tags' => $tags,
             'popularPosts' => $popularPosts,
             'comments' => $comments,
-            'confirmedCommentsCount' => $confirmedCommentsCount
+            'confirmedCommentsCount' => $confirmedCommentsCount,
+            'socialLinks' => $socialLinks
 
         ]);
     }

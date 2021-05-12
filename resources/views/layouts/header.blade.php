@@ -27,9 +27,9 @@
                         <li class="nav-item {{ request()->is('/') ? 'active' : '' }}"><a class="nav-link" href="{{ route('/') }}">Anasayfa</a></li>
                         @auth()
                             <li class="nav-item {{ request()->is('profile') ? 'active' : '' }}"><a class="nav-link" href="{{ route('profile') }}">Profil</a></li>
-                            <li class="nav-item "><a class="nav-link" href="{{ route('user.post.create') }}">Post Ekle</a></li>
-                            <li class="nav-item"><a class="nav-link" href="">Panel</a></li
-
+                            <li class="nav-item {{ request()->is('new/post') ? 'active' : '' }}"><a class="nav-link" href="{{ route('user.post.create') }}">Post Ekle</a></li>
+                            <li class="nav-item"><a class="nav-link" href="javascript:;" onclick="document.getElementById('logout').submit();">Çıkış Yap</a></li>
+                            <form action="{{ route('logout') }}" method="post" id="logout">@csrf</form>
                         @else
                             <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Giriş Yap</a></li>
                         @endauth

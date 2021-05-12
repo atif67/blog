@@ -21,7 +21,7 @@
 <body class="dark ">
 <div class="wrapper vh-100">
     <div class="row align-items-center h-100">
-        <form action="{{ route('login') }}" method="post" class="col-lg-3 col-md-4 col-10 mx-auto text-center">
+        <form action="{{ route('admin.login') }}" method="post" class="col-lg-3 col-md-4 col-10 mx-auto text-center">
             @csrf
             <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="#">
                 <svg version="1.1" id="logo" class="navbar-brand-img brand-md" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 120 120" xml:space="preserve">

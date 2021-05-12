@@ -55,10 +55,10 @@
                                             <div class="single-comment justify-content-between d-flex">
                                                 <div class="user justify-content-between d-flex">
                                                     <div class="thumb">
-                                                        <img src="{{ URL::asset('uploads/images/avatar.png') }}" width="50" height="50" alt="">
+                                                        <img src="{{ isset($comment->user->avatar) ? URL::asset('uploads/'.$comment->user->avatar) : URL::asset('uploads/images/avatar.png') }}" width="50" height="50" alt="">
                                                     </div>
                                                     <div class="desc">
-                                                        <h5><a href="#">{{ $comment->name }}</a></h5>
+                                                        <h5><a href="#">{{ $comment->user->name }}</a></h5>
                                                         <p class="date">{{ $comment->created_at }}</p>
                                                         <p class="comment">
                                                             {{ $comment->content }}
@@ -73,24 +73,22 @@
                             </div>
                     @endif
                         @if($post->comment_status == 1)
-                        <div class="comment-form">
-                            <h4>Yorum Yap</h4>
-                            <form action="{{ route('comments.create',$post->id) }}" method="post">
-                                @csrf
-                                <div class="form-group form-inline">
-                                    <div class="form-group col-lg-6 col-md-6 name">
-                                        <input name="name" type="text" class="form-control" id="name" placeholder="İsim Soyisim" onfocus="this.placeholder = ''" onblur="this.placeholder = 'İsim Soyisim'" required>
-                                    </div>
-                                    <div class="form-group col-lg-6 col-md-6 email">
-                                        <input name="email" type="email" class="form-control" id="email" placeholder="Email adres" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email adres'" required>
-                                    </div>
+                            @auth()
+                                <div class="comment-form">
+                                    <h4>Yorum Yap</h4>
+                                    <form action="{{ route('comments.create',$post->id) }}" method="post">
+                                        @csrf
+                                        <div class="form-group">
+                                            <textarea class="form-control mb-10" rows="5" name="content" placeholder="Yorum" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Yorum'" required="" maxlength="2500"></textarea>
+                                        </div>
+                                        <button class="primary-btn primary_btn"><span>Gönder</span></button>
+                                    </form>
                                 </div>
-                                <div class="form-group">
-                                    <textarea class="form-control mb-10" rows="5" name="content" placeholder="Yorum" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Yorum'" required=""></textarea>
+                            @else
+                                <div class="comment-form">
+                                    <p>Yorum Yapabilmek için lütfen <a href="{{ route('login') }}">giriş</a> yapın.</p>
                                 </div>
-                                <button class="primary-btn primary_btn"><span>Gönder</span></button>
-                            </form>
-                        </div>
+                            @endauth
                         @endif
                 </div>
                 <div class="col-lg-4">
@@ -108,11 +106,11 @@
                                 @endforeach
                             </p>
                             <div class="social_icon">
-                                <a href="#"><i class="fa fa-github"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-linkedin"></i></a>
+                                <a href="{{ isset($socialLinks->github) ? $socialLinks->github : 'javascript:void(0);' }}"><i class="fa fa-github"></i></a>
+                                <a href="{{ isset($socialLinks->twitter) ? $socialLinks->twitter : 'javascript:void(0);' }}"><i class="fa fa-twitter"></i></a>
+                                <a href="{{ isset($socialLinks->instagram) ? $socialLinks->instagram : 'javascript:void(0);' }}"><i class="fa fa-instagram"></i></a>
+                                <a href="{{ isset($socialLinks->facebook) ? $socialLinks->facebook : 'javascript:void(0);' }}"><i class="fa fa-facebook"></i></a>
+                                <a href="{{ isset($socialLinks->linkedin) ? $socialLinks->linkedin : 'javascript:void(0);'}}"><i class="fa fa-linkedin"></i></a>
                             </div>
                             <p>
                                 {{ $user->about }}
@@ -181,7 +179,7 @@
                                 <a href="javascript:;" onclick="document.getElementById('post_email').submit();" class="bbtns">Gönder</a>
                             </div>
                             </form>
-                            <p class="text-bottom">İstediğiniz zaman abonelikten çıkablirsiniz.</p>
+                            <p class="text-bottom">İstediğiniz zaman abonelikten çıkabilirsiniz.</p>
                             <div class="br"></div>
                         </aside>
 

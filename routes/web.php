@@ -12,28 +12,36 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+// Public Routes{
 Route::get('/', [\App\Http\Controllers\HomeController::class,'get'])->name('/');
 Route::get('post/{slug}',[\App\Http\Controllers\HomeController::class,'postDetail'])->name('post.detail');
-
-
-
-
-Route::get('admin/login',[\App\Http\Controllers\Admin\UserController::class,'loginView'])->name('login');
-Route::post('admin/login',[\App\Http\Controllers\Admin\UserController::class,'login'])->name('login');
-Route::post('admin/logout',[\App\Http\Controllers\Admin\UserController::class,'logout'])->name('logout');
-
-Route::post('comments/{id}',[\App\Http\Controllers\CommentController::class,'post'])->name('comments.create');
-
+    // User Login
+    Route::get('login',[\App\Http\Controllers\UserController::class,'loginView'])->name('login');
+    Route::post('login',[\App\Http\Controllers\UserController::class,'login'])->name('login');
+    Route::get('register',[\App\Http\Controllers\UserController::class,'registerView'])->name('register');
+    Route::post('register',[\App\Http\Controllers\UserController::class,'register'])->name('register');
+    Route::post('logout', [\App\Http\Controllers\Admin\UserController::class,'logout'])->name('logout');
+//}
 
 Route::middleware(['auth'])->group(function (){
-    Route::get('admin',[\App\Http\Controllers\Admin\HomeController::class,'get'])->name('admin.home');
+
     Route::get('profile',[\App\Http\Controllers\UserController::class,'get'])->name('profile');
+    Route::get('profile-edit',[\App\Http\Controllers\UserController::class,'updateProfileView'])->name('profile-edit');
+    Route::put('profile-edit',[\App\Http\Controllers\UserController::class,'updateProfile'])->name('profile-edit');
+
     Route::get('new/post',[\App\Http\Controllers\PostController::class,'createPage'])->name('user.post.create');
     Route::post('new/post',[\App\Http\Controllers\PostController::class,'post'])->name('user.post.create');
+    Route::get('edit/post/{slug}',[\App\Http\Controllers\PostController::class,'editPage'])->name('user.post.edit');
+    Route::put('edit/post/{slug}',[\App\Http\Controllers\PostController::class,'put'])->name('user.post.edit');
+    Route::post('comments/{id}',[\App\Http\Controllers\CommentController::class,'post'])->name('comments.create');
+
 });
 
-Route::middleware(['auth'])->prefix('admin')->group(function (){
+
+// Admin Panel HomePage
+Route::get('admin',[\App\Http\Controllers\Admin\HomeController::class,'get'])->name('admin.home')->middleware('role');
+
+Route::middleware(['role'])->prefix('admin')->group(function (){
 
     Route::get('posts',[\App\Http\Controllers\Admin\PostController::class,'get'])->name('posts.index');
     Route::get('posts/new',[\App\Http\Controllers\Admin\PostController::class,'createView'])->name('posts.create');

@@ -25,8 +25,6 @@ class CommentCreateRequest extends FormRequest
     {
         return [
             'content' => 'required|max:2500',
-            'name' => 'required|max:30',
-            'email' => 'required|max:40'
         ];
     }
 }

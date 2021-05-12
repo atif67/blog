@@ -25,7 +25,7 @@
                                     @foreach($comments as $comment)
                                         <tr>
                                             <td>{{ $comment->post->title }}</td>
-                                            <td>{{ $comment->name }}</td>
+                                            <td>{{ $comment->user->name }}</td>
                                             <td>
                                                 @if($comment->confirmation_status == 1)
                                                     Onaylandı
