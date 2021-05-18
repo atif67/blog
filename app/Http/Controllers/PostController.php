@@ -42,9 +42,9 @@ class PostController extends Controller
         return $this->postInterface->put($request, $slug);
     }
 
-    public function destroy()
+    public function destroy($slug)
     {
-        return $this->postInterface->destroy();
+        return $this->postInterface->destroy($slug);
     }
 
 

@@ -93,7 +93,7 @@ class PostRepository implements PostInterface
     public function put(PostCreateRequest $request, $slug)
     {
         // TODO: Implement put() method.
-        $post = Post::where('slug',$slug)->first();
+        $post = Post::where('user_id')->where('slug',$slug)->first();
         $post->title = $request->input('title');
         $post->content = $request->input('content');
         $post->summary = $request->input('summary');
@@ -135,6 +135,15 @@ class PostRepository implements PostInterface
     public function destroy($slug)
     {
         // TODO: Implement destroy() method.
+        $post = Post::where('user_id',Auth::id())->where('slug',$slug)->first();
+        if (! $post)
+        {
+            return redirect()->back();
+        }
+        $post->delete($post->id);
+
+        session()->flash('postDeleted','ok');
+        return redirect()->back();
     }
 
 

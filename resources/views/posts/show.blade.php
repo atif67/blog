@@ -73,7 +73,8 @@
                             </div>
                     @endif
                         @if($post->comment_status == 1)
-                            @auth()
+                            @auth
+                                @if(auth()->user()->verifyEmail())
                                 <div class="comment-form">
                                     <h4>Yorum Yap</h4>
                                     <form action="{{ route('comments.create',$post->id) }}" method="post">
@@ -84,6 +85,11 @@
                                         <button class="primary-btn primary_btn"><span>Gönder</span></button>
                                     </form>
                                 </div>
+                                @else
+                                    <div class="comment-form">
+                                        <p>Lütfen Mail Adresinizi <a href="{{ route('profile') }}">Onaylayın</a></p>
+                                    </div>
+                                @endif
                             @else
                                 <div class="comment-form">
                                     <p>Yorum Yapabilmek için lütfen <a href="{{ route('login') }}">giriş</a> yapın.</p>

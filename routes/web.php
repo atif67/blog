@@ -15,15 +15,8 @@ use Illuminate\Support\Facades\Route;
 // Public Routes{
 Route::get('/', [\App\Http\Controllers\HomeController::class,'get'])->name('/');
 Route::get('post/{slug}',[\App\Http\Controllers\HomeController::class,'postDetail'])->name('post.detail');
-    // User Login
-    Route::get('login',[\App\Http\Controllers\UserController::class,'loginView'])->name('login');
-    Route::post('login',[\App\Http\Controllers\UserController::class,'login'])->name('login');
-    Route::get('register',[\App\Http\Controllers\UserController::class,'registerView'])->name('register');
-    Route::post('register',[\App\Http\Controllers\UserController::class,'register'])->name('register');
-    Route::post('logout', [\App\Http\Controllers\Admin\UserController::class,'logout'])->name('logout');
-//}
 
-Route::middleware(['auth'])->group(function (){
+Route::middleware(['auth','verified'])->group(function (){
 
     Route::get('profile',[\App\Http\Controllers\UserController::class,'get'])->name('profile');
     Route::get('profile-edit',[\App\Http\Controllers\UserController::class,'updateProfileView'])->name('profile-edit');
@@ -33,6 +26,7 @@ Route::middleware(['auth'])->group(function (){
     Route::post('new/post',[\App\Http\Controllers\PostController::class,'post'])->name('user.post.create');
     Route::get('edit/post/{slug}',[\App\Http\Controllers\PostController::class,'editPage'])->name('user.post.edit');
     Route::put('edit/post/{slug}',[\App\Http\Controllers\PostController::class,'put'])->name('user.post.edit');
+    Route::delete('delete/post/{slug}',[\App\Http\Controllers\PostController::class,'destroy'])->name('user.post.delete');
     Route::post('comments/{id}',[\App\Http\Controllers\CommentController::class,'post'])->name('comments.create');
 
 });
@@ -82,3 +76,10 @@ Route::middleware(['role'])->prefix('admin')->group(function (){
     Route::post('subscribe',[\App\Http\Controllers\SubscribeController::class,'post'])->name('subscribe');
 });
 
+Auth::routes(['verify' => true]);
+
+Route::get('login',[\App\Http\Controllers\UserController::class,'loginView'])->name('login');
+Route::post('login',[\App\Http\Controllers\UserController::class,'login'])->name('login');
+Route::get('register',[\App\Http\Controllers\UserController::class,'registerView'])->name('register');
+Route::post('register',[\App\Http\Controllers\UserController::class,'register'])->name('register');
+Route::post('logout', [\App\Http\Controllers\Admin\UserController::class,'logout'])->name('logout');
