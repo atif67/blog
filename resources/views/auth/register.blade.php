@@ -56,7 +56,6 @@
     </div>
 </div>
 
-
 <script src="{{ URL::asset('assets/login/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
 <script src="{{ URL::asset('assets/login/js/main.js') }}"></script>
 
