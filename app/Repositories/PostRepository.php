@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 
 class PostRepository implements PostInterface
 {
+
     public function get()
     {
         // TODO: Implement get() method.
